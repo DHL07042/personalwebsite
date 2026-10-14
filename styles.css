@@ -306,6 +306,9 @@ figure.fig figcaption{margin-top:8px;font-size:var(--small);color:var(--muted)}
 .gallery img{width:100%;height:100%;aspect-ratio:1;object-fit:cover;transition:transform .35s ease}
 .gallery a:hover img{transform:scale(1.03)}
 
+.project h3.sub{margin-top:clamp(22px,3vw,32px);font-size:1.1rem;color:var(--muted);font-weight:600}
+.project h3.sub+.gallery,.project h3.sub+.part{margin-top:.7rem}
+
 /* ---------- Contact ---------- */
 .contact{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);margin-top:clamp(24px,4vw,40px)}
 .contact-card{border:1px solid var(--line);border-radius:var(--r);background:var(--bg-2);padding:clamp(22px,3vw,32px)}
@@ -389,9 +392,7 @@ figure.fig a[data-lightbox],.gallery a[data-lightbox]{cursor:zoom-in}
 }
 
 /* Preserve scientific panels and reflow without reducing type. */
-.facts dd .nowrap{display:inline;margin:0;font:inherit;color:inherit}
 .media .fig a{min-width:0}
-@media (max-width:600px){.facts .nowrap{white-space:normal}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -410,4 +411,3 @@ figure.fig a[data-lightbox],.gallery a[data-lightbox]{cursor:zoom-in}
 .header-row{flex-wrap:wrap}
 .header-controls{max-width:100%;flex-wrap:wrap}
 .site-nav{min-width:0;flex-wrap:wrap}
-.facts dd .nowrap{display:inline-block;max-width:100%;white-space:normal;vertical-align:top}
