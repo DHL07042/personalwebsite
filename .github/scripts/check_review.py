@@ -66,7 +66,7 @@ with sync_playwright() as p:
         for fn in ['index.html','research.html','contact.html']:
             page.goto(BASE+fn,wait_until='domcontentloaded');page.evaluate('document.fonts.ready')
             page.add_style_tag(content='html{font-size:200%!important}')
-            row={'width':width,'page':fn,'overflow':page.evaluate('document.documentElement.scrollWidth>innerWidth+1')}
+            row={'width':width,'page':fn,'overflow':page.evaluate('document.documentElement.scrollWidth>innerWidth+1'),'offenders':page.evaluate("Array.from(document.querySelectorAll('body *')).filter(e=>e.getBoundingClientRect().right>innerWidth+1).slice(0,8).map(e=>({tag:e.tagName,cls:e.className,right:e.getBoundingClientRect().right}))")}
             report['text_zoom'].append(row)
     checks['text_zoom_no_horizontal_overflow']=all(not r['overflow'] for r in report['text_zoom'])
     for name,width,fn in [('review-desktop',1440,'index.html'),('review-laptop',1280,'index.html'),('review-fold',674,'index.html'),('review-tablet',820,'research.html'),('review-phone',390,'research.html'),('review-research',1440,'research.html')]:

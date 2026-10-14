@@ -405,3 +405,9 @@ figure.fig a[data-lightbox],.gallery a[data-lightbox]{cursor:zoom-in}
   .project,.pub{break-inside:avoid}
   h1{font-size:26pt}h2{font-size:18pt}
 }
+
+/* Enlarged-text reflow: preserve the normal one-line header and dates when they fit. */
+.header-row{flex-wrap:wrap}
+.header-controls{max-width:100%;flex-wrap:wrap}
+.site-nav{min-width:0;flex-wrap:wrap}
+.facts dd .nowrap{display:inline-block;max-width:100%;white-space:normal;vertical-align:top}
