@@ -1,0 +1,2 @@
+/* Apply the explicit preference before CSS. First visit is light. */
+(function(){'use strict';var r=document.documentElement,p='light';try{var s=localStorage.getItem('dhl-portfolio-theme-v1');if(['light','dark','system'].indexOf(s)!==-1)p=s;}catch(e){}var dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.themePreference=p;r.dataset.theme=p==='system'?(dark?'dark':'light'):p;})();

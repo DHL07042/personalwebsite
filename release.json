@@ -1,1 +1,19 @@
-{"release":"2026-10-14.1","site":"Daeho Lee","domain":"daeholee.me","pages":["index.html","research.html","publications.html","personal.html","contact.html"],"mode":"static-light"}
+{
+  "release": "2026-10-14.2",
+  "site": "Daeho Lee",
+  "domain": "daeholee.me",
+  "pages": [
+    "index.html",
+    "research.html",
+    "publications.html",
+    "personal.html",
+    "contact.html"
+  ],
+  "features": [
+    "academic-copy",
+    "larger-navigation",
+    "light-dark-system",
+    "native-video-embeds"
+  ],
+  "base_content_commit": "860b6082feaec1a84e198f4005a42e9275bb8d31"
+}
