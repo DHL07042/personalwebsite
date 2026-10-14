@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="site-release" content="2026-10-15.1">
+<meta name="site-release" content="2026-10-15.2">
 <title>Research — Daeho Lee</title>
 <meta name="description" content="Foot⁠–⁠ground distance sensing, exoskeleton instrumentation, and experiments from Daeho Lee’s research at KAIST’s Exo Lab.">
 <link rel="canonical" href="https://daeholee.me/research.html">
@@ -30,8 +30,8 @@
   if(pref==='system')root.removeAttribute('data-theme');else root.setAttribute('data-theme',pref);
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=2026-10-15.1">
-<script src="app.js?v=2026-10-15.1" defer></script>
+<link rel="stylesheet" href="styles.css?v=2026-10-15.2">
+<script src="app.js?v=2026-10-15.2" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -84,9 +84,9 @@
       <h3>Real‑time gait‑phase detection</h3>
       <div class="cols">
         <div><h4>What I did</h4><p>Designed a shoe‑mounted module with two ToF sensors, near the lateral heel and the fifth metatarsophalangeal (MTP) joint, and a threshold‑based algorithm that segments the gait cycle into six phases in real time. This work was presented at ASME ISPS 2021 [T1] and subsequently reported in JKSPE [J1].</p></div>
-        <div><h4>Evaluation</h4><p>One healthy participant walked on a flat indoor floor, with about 20 full gait cycles per trial set [J1]. Against an air‑bladder pressure reference, the distance‑based method starts stance just before physical contact, so it reports a shorter swing phase (by 3.6 and 5.9 percentage points for the left and right foot); in exchange, it keeps measuring through swing [J1].</p></div>
+        <div><h4>Evaluation</h4><p>One healthy participant walked on a flat indoor floor, with about 20 full gait cycles per trial set [J1]. Compared with air‑bladder pressure measurements, the distance‑based method reported swing fractions 3.6 and 5.9 percentage points lower for the left and right foot, respectively (Table 2). It also provided distance measurements during swing [J1].</p></div>
       </div>
-      <p class="method-note"><strong>Design choices.</strong> The heel leaves and reaches the ground before the MTP in every step, and the two distances cross when the sole is parallel to the ground; the six phases are defined from these events. The VL53L1X sensor is not accurate below 40&nbsp;mm, so near the ground its reading is used only as a contact flag, with thresholds under 10&nbsp;mm. To keep the decision real‑time, the algorithm compares each reading with the previous one instead of differentiating the distance signal, which would amplify noise and require a phase‑lagging filter [J1].</p>
+      <p class="method-note"><strong>Design choices.</strong> The algorithm defines six gait states from heel and forefoot contact flags, the relative sensor distances, and whether the heel distance is increasing or decreasing. After subtracting the standing offset from each distance signal, small thresholds were used for contact-state detection rather than precise near-ground ranging. During swing, successive heel readings were compared without explicitly estimating velocity [J1, Sections 3.2 and 4.2].</p>
       <div class="media study-figures" aria-label="Figures from the journal article J1">
 <figure class="fig">
   <a href="assets/img/j1-fig2-module.webp" data-lightbox><img src="assets/img/j1-fig2-module.webp" alt="Two photographs: the sensor module strapped under a sneaker with two ToF sensors, a Teensy 3.2 board and a myRIO controller; and the bottom view with silicone-tube air bladders at the heel and MTP" loading="lazy" width="1400" height="671"></a>
@@ -101,7 +101,7 @@
   <figcaption>Distances (top) and detected phases (bottom) for both feet during continuous walking [J1, Fig. 10].</figcaption>
 </figure>
       </div>
-      <p class="fig-credit">Figures reproduced from [J1], © Korean Society for Precision Engineering, under CC BY‑NC 3.0.</p>
+      <p class="fig-credit">Figures 2, 8, and 10 from D. Lee, <a href="https://doi.org/10.7736/JKSPE.026.00011">“Real-time Gait Phase Detection System Using Non-contact Distance Sensors”</a>, JKSPE (2026). © Korean Society for Precision Engineering. <a href="https://creativecommons.org/licenses/by-nc/3.0/" rel="license">CC BY‑NC 3.0</a>; converted to WebP for display.</p>
 
     </div>
     <div class="part" id="initial-contact">
