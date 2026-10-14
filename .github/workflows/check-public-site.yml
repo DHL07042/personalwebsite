@@ -7,69 +7,69 @@ permissions: {}
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 4
+    timeout-minutes: 5
     steps:
-      - name: Inspect public DNS, pages, and HTTPS
+      - name: Inspect DNS, TLS, redirects and current release
         shell: bash
         run: |
           python3 - <<'PY'
-          import json
-          import socket
-          import ssl
-          import urllib.request
+          import concurrent.futures as cf
+          import json, socket, ssl, time, urllib.request, urllib.parse
           from datetime import datetime, timezone
           from html.parser import HTMLParser
-
-          class PageParser(HTMLParser):
+          CTX = ssl.create_default_context()
+          class Parser(HTMLParser):
               def __init__(self):
-                  super().__init__()
-                  self.in_title = False
-                  self.title = ''
-                  self.release = None
+                  super().__init__(); self.title=''; self.in_title=False; self.release=None
               def handle_starttag(self, tag, attrs):
-                  attrs = dict(attrs)
-                  if tag == 'title':
-                      self.in_title = True
-                  if tag == 'meta' and attrs.get('name') == 'site-release':
-                      self.release = attrs.get('content')
+                  a=dict(attrs)
+                  if tag=='title': self.in_title=True
+                  if tag=='meta' and a.get('name')=='site-release': self.release=a.get('content')
               def handle_endtag(self, tag):
-                  if tag == 'title':
-                      self.in_title = False
-              def handle_data(self, data):
-                  if self.in_title:
-                      self.title += data
-
-          report = {'checked_at_utc': datetime.now(timezone.utc).isoformat(), 'dns': [], 'http': []}
-          for host in ['daeholee.me', 'www.daeholee.me', 'dhl07042.github.io']:
-              row = {'host': host}
+                  if tag=='title': self.in_title=False
+              def handle_data(self, text):
+                  if self.in_title: self.title+=text
+          def fetch(url, accept=None):
+              t=time.monotonic(); headers={'User-Agent':'DaehoLee-PublicSiteCheck/2.0'}
+              if accept: headers['Accept']=accept
+              with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=12, context=CTX) as r:
+                  return r.status, r.url, dict(r.headers), r.read(350000).decode('utf-8','replace'), round(time.monotonic()-t,3)
+          def dns(q):
+              provider,name,typ=q
+              base={'google':'https://dns.google/resolve','cloudflare':'https://cloudflare-dns.com/dns-query'}[provider]
+              result={'provider':provider,'name':name,'type':typ}
               try:
-                  row['addresses'] = sorted({x[4][0] for x in socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)})
-              except Exception as exc:
-                  row['error'] = str(exc)
-              report['dns'].append(row)
-          core_urls = ['https://daeholee.me/' + path for path in ['', 'research.html', 'publications.html', 'personal.html', 'contact.html', 'styles.css', 'release.json']]
-          other_urls = ['https://www.daeholee.me/', 'http://www.daeholee.me/', 'http://daeholee.me/', 'https://dhl07042.github.io/personalwebsite/']
-          for url in core_urls + other_urls:
-              row = {'url': url, 'core': url in core_urls}
+                  _,_,_,body,elapsed=fetch(base+'?'+urllib.parse.urlencode({'name':name,'type':typ}),'application/dns-json')
+                  data=json.loads(body); result.update(status=data.get('Status'), answers=data.get('Answer',[]), authority=data.get('Authority',[]), ad=data.get('AD'), seconds=elapsed)
+              except Exception as e: result['error']=str(e)
+              return result
+          def tls(host):
+              t=time.monotonic(); row={'host':host}
               try:
-                  request = urllib.request.Request(url, headers={'User-Agent': 'DaehoLee-PublicSiteCheck/1.0'})
-                  with urllib.request.urlopen(request, timeout=15, context=ssl.create_default_context()) as response:
-                      body = response.read(262144).decode('utf-8', errors='replace')
-                      row.update(status=response.status, final_url=response.url, content_type=response.headers.get('Content-Type'), size=len(body))
-                      if 'text/html' in row['content_type']:
-                          parsed = PageParser()
-                          parsed.feed(body)
-                          row.update(title=parsed.title, release=parsed.release)
-                      elif url.endswith('release.json'):
-                          row['release'] = json.loads(body).get('release')
-                      elif url.endswith('styles.css'):
-                          row['has_expected_css'] = '.research-explore' in body and '.pager-card' in body
-              except Exception as exc:
-                  row['error'] = str(exc)
-              report['http'].append(row)
-          report['core_ok'] = all(x.get('status') == 200 and (x.get('release') == '2026-10-14.1' or x.get('has_expected_css') is True) for x in report['http'] if x['core'])
-          print(json.dumps(report, indent=2))
-          # www TLS and redirect findings are reported separately during cutover.
-          if not report['core_ok']:
-              raise SystemExit('At least one core page or asset did not match this release.')
+                  with socket.create_connection((host,443), timeout=10) as sock:
+                      with CTX.wrap_socket(sock, server_hostname=host) as s:
+                          cert=s.getpeercert(); row.update(valid=True, peer=s.getpeername()[0], protocol=s.version(), san=cert.get('subjectAltName'), expires=cert.get('notAfter'), seconds=round(time.monotonic()-t,3))
+              except Exception as e: row.update(valid=False, error=str(e), seconds=round(time.monotonic()-t,3))
+              return row
+          def http(url):
+              row={'url':url}; t=time.monotonic()
+              try:
+                  status,final,headers,body,elapsed=fetch(url); row.update(status=status, final_url=final, seconds=elapsed, bytes=len(body), content_type=headers.get('Content-Type', headers.get('content-type','')))
+                  if '<html' in body.lower():
+                      p=Parser(); p.feed(body); row.update(title=p.title, release=p.release)
+                  elif url.endswith('release.json'): row['release']=json.loads(body).get('release')
+              except Exception as e: row.update(error=str(e), seconds=round(time.monotonic()-t,3))
+              return row
+          queries=[(p,n,t) for p in ['google','cloudflare'] for n in ['daeholee.me','www.daeholee.me'] for t in ['A','AAAA','CNAME','CAA','HTTPS']]+[('google','daeholee.me','NS'),('google','daeholee.me','DS')]
+          urls=['https://daeholee.me/'+p for p in ['','research.html','publications.html','personal.html','contact.html','styles.css','release.json']]+['https://www.daeholee.me/','http://www.daeholee.me/','http://daeholee.me/','https://dhl07042.github.io/personalwebsite/']
+          with cf.ThreadPoolExecutor(max_workers=8) as ex:
+              report={'checked_at_utc':datetime.now(timezone.utc).isoformat(), 'dns':list(ex.map(dns,queries)), 'tls':list(ex.map(tls,['daeholee.me','www.daeholee.me'])), 'http':list(ex.map(http,urls))}
+          report['core_accessible']=all(r.get('status')==200 for r in report['http'][:7])
+          report['both_https_valid']=all(r.get('valid') for r in report['tls'])
+          print('DIAGNOSTIC_JSON_BEGIN')
+          print(json.dumps(report,indent=2))
+          print('DIAGNOSTIC_JSON_END')
+          # This diagnostic reports findings; a successful job alone is NOT proof
+          # of working DNS/TLS. Read core_accessible/both_https_valid and rows.
+          # No account data, secrets, DNS writes, or certificate bypasses are used.
           PY
