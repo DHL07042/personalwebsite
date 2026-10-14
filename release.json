@@ -1,5 +1,5 @@
 {
-  "release": "2026-10-14.4",
+  "release": "2026-10-14.5",
   "site": "Daeho Lee",
   "domain": "daeholee.me",
   "pages": [
@@ -12,7 +12,9 @@
   "features": [
     "academic-copy",
     "light-dark-system",
+    "self-hosted-fonts",
     "click-to-play-video",
+    "lightbox",
     "photographs-and-figures",
     "responsive-type"
   ],
