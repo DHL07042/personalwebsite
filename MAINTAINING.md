@@ -53,10 +53,16 @@ PR descriptions, comments, committed files and CI logs are public in this reposi
 - T1's supplied one-page abstract and presentation both list D. Lee, K. Kong, H. Choi, in that order. Follow those sources rather than an older CV order unless contrary primary evidence is provided.
 - T1 is a related earlier presentation of the J1 work. Do not describe overshoe packaging as a demonstrated new addition in 2026 or label the entries as independent replications.
 - The T1 deck shows speed conditions for participant 1 and additional participant examples; do not imply a fully crossed participants-by-speeds validation without records.
-- Retain [T1] provenance on the three figures. New display assets use lossless conversion and exactly-white exterior trim only; media-processing.json records source hashes, crop boxes and pixel checks. Source assets remain unmodified.
+- The old T1 display decision was superseded by owner-approved PR #8: show the published J1 figures with their original figure numbers and license; retain the presentation-to-journal relationship in text. Do not restore the supplied slide deck or private abstract in public assets without new authorization.
 - The owner-approved GRF Case I/II/III mapping remains. Image preparation does not authorize revised analyses or additional effect claims.
 - Music is a personal interest, not a research achievement. Driving text still requires owner-approved wording and images.
 - Keep private correspondence and publication-administration review details outside this public repository.
 - DNS TTL is cache lifetime, not a periodic connection timer. Do not change DNS based only on a speculative latency diagnosis.
-- Home timeline carries CV honors (CYBATHLON medals, KAIST Global Leadership Award, magna cum laude, scholarships). The 2024 ROK Army commendation and any ADD role description wait for the owner's confirmation of ADD release approval.
-- Personal page wording follows CV v0.99: AFN "broadcaster and video editor"; Samsung "diagonal horizontally mounted capacitor (D-HMC)".
+- Home timeline carries CV honors and the owner-authorized 2024 Certificate of Commendation from the Chief of Staff, Republic of Korea Army. Do not infer its project, technical grounds, or a new job title. Approval of the award text does not approve additional ADD work descriptions.
+- Personal page wording follows CV v0.991: AFN "broadcaster and video editor"; Samsung "diagonal horizontally mounted capacitor (D-HMC)".
+
+## Public CV intake
+- The website PDF is `Daeho-Lee-CV.pdf`; its exact release metadata and digest are in `public-cv.json`. Only the owner-designated public edition is eligible. Never substitute the full CV.
+- Before linking a new PDF, remove previous saved revisions and unreferenced objects, then check rendered pages, extracted text, links, embedded files, and remaining objects. Visible redaction alone is not a file-level clearance check.
+- The current reviewed PDF preserves the supplied public edition’s visible text, including its temporary work-summary labels. Publishing it is not a certification of employer clearance or final application readiness.
+- The expected PDF must pass `check_public_cv.py` before this change is ready for merge. Keep revision-recovery demonstrations and private document findings outside this repository.
