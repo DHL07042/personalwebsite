@@ -69,5 +69,29 @@
     });
   });
 
+  /* Lightbox: click a figure to view it large; click anywhere or press Escape to close.
+     Right-click on the enlarged image still offers "open image in new tab". */
+  var lb=document.getElementById('lightbox');
+  if(lb){
+    var lbImg=lb.querySelector('img'),lbCap=lb.querySelector('figcaption'),lastFocus=null;
+    function openLb(src,alt,cap){lastFocus=document.activeElement;lbImg.src=src;lbImg.alt=alt||'';lbCap.textContent=cap||'';lb.hidden=false;document.body.classList.add('lb-open');lb.querySelector('.lb-close').focus();}
+    function closeLb(){lb.hidden=true;document.body.classList.remove('lb-open');lbImg.removeAttribute('src');if(lastFocus&&lastFocus.focus)lastFocus.focus();}
+    Array.prototype.forEach.call(document.querySelectorAll('a[data-lightbox]'),function(a){
+      a.addEventListener('click',function(e){
+        if(e.metaKey||e.ctrlKey||e.shiftKey||e.button!==0)return;
+        e.preventDefault();
+        var img=a.querySelector('img'),fig=a.closest('figure'),cap=fig?fig.querySelector('figcaption'):null;
+        openLb(a.getAttribute('href'),img?img.alt:'',cap?cap.textContent:'');
+      });
+    });
+    lb.addEventListener('click',function(){closeLb();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!lb.hidden)closeLb();});
+  }
+
+  /* Respect reduced motion for the looping clip. */
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    Array.prototype.forEach.call(document.querySelectorAll('video[autoplay]'),function(v){v.removeAttribute('autoplay');v.pause();v.setAttribute('controls','');});
+  }
+
   root.classList.add('js');
 })();
