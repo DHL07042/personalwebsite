@@ -1,0 +1,42 @@
+name: Public website check
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions: {}
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Inspect public DNS and HTTP responses
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import socket
+          import ssl
+          import urllib.request
+          from datetime import datetime, timezone
+
+          report = {'checked_at_utc': datetime.now(timezone.utc).isoformat(), 'dns': [], 'http': []}
+          for host in ['daeholee.me', 'www.daeholee.me', 'dhl07042.github.io']:
+              row = {'host': host}
+              try:
+                  row['addresses'] = sorted({x[4][0] for x in socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)})
+              except Exception as exc:
+                  row['error'] = str(exc)
+              report['dns'].append(row)
+          for url in ['https://daeholee.me/release.json', 'https://www.daeholee.me/release.json', 'http://daeholee.me/release.json', 'https://dhl07042.github.io/personalwebsite/release.json']:
+              row = {'url': url}
+              try:
+                  request = urllib.request.Request(url, headers={'User-Agent': 'DaehoLee-PublicSiteCheck/1.0'})
+                  with urllib.request.urlopen(request, timeout=15, context=ssl.create_default_context()) as response:
+                      body = response.read(2048).decode('utf-8', errors='replace')
+                      row.update(status=response.status, final_url=response.url, content_type=response.headers.get('Content-Type'), release_matches='2026-10-14.1' in body, body_preview=body[:220])
+              except Exception as exc:
+                  row['error'] = str(exc)
+              report['http'].append(row)
+          print(json.dumps(report, indent=2))
+          # Informational during domain cutover: no DNS or hosting settings are changed.
+          PY
