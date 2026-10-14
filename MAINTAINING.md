@@ -48,3 +48,13 @@ PR descriptions, comments, committed files and CI logs are public in this reposi
 - Check viewport widths including narrow phone, opened foldable, tablet, laptop and large desktop, both themes, enlarged text, theme persistence, no-JS/failed-JS navigation, and lightbox focus/closure.
 - Green CI does not prove DNS/TLS correctness or complete video playback. Read the actual reports and flag untested scope.
 - Network reports should distinguish DNS/connect/TLS/server response from browser parsing/resources. A fast overseas runner does not disprove a slow visit on the owner's network.
+
+## Release .8 evidence and image handling
+- T1's supplied one-page abstract and presentation both list D. Lee, K. Kong, H. Choi, in that order. Follow those sources rather than an older CV order unless contrary primary evidence is provided.
+- T1 is a related earlier presentation of the J1 work. Do not describe overshoe packaging as a demonstrated new addition in 2026 or label the entries as independent replications.
+- The T1 deck shows speed conditions for participant 1 and additional participant examples; do not imply a fully crossed participants-by-speeds validation without records.
+- Retain [T1] provenance on the three figures. New display assets use lossless conversion and exactly-white exterior trim only; media-processing.json records source hashes, crop boxes and pixel checks. Source assets remain unmodified.
+- The owner-approved GRF Case I/II/III mapping remains. Image preparation does not authorize revised analyses or additional effect claims.
+- Music is a personal interest, not a research achievement. Driving text still requires owner-approved wording and images.
+- Keep private correspondence and publication-administration review details outside this public repository.
+- DNS TTL is cache lifetime, not a periodic connection timer. Do not change DNS based only on a speculative latency diagnosis.

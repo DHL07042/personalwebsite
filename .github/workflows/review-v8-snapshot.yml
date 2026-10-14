@@ -1,0 +1,41 @@
+name: Review v8 source snapshot
+on:
+  push:
+    branches: ['gpt/site-evidence-v8-261014']
+    paths: ['.github/workflows/review-v8-snapshot.yml']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - name: Snapshot tracked public sources without font binaries
+        run: |
+          mkdir -p review-output
+          python3 - <<'PY'
+          import subprocess,zipfile,json,ssl,socket,time,concurrent.futures
+          from pathlib import Path
+          from datetime import datetime,timezone
+          files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with zipfile.ZipFile('review-output/source-no-fonts.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for name in files:
+                  if name and Path(name).suffix.lower() not in {'.woff','.woff2','.ttf','.otf'}:z.write(name,name)
+          rows=[]
+          urls=['https://daeholee.me/'+x for x in ['','contact.html','research.html']]*6+['https://www.daeholee.me/']*2
+          def sample(url):
+              p=subprocess.run(['curl','-sS','-L','--max-time','20','-o','/dev/null','-w','%{json}',url],capture_output=True,text=True,timeout=23)
+              try:d=json.loads(p.stdout)
+              except Exception:d={}
+              return {'url':url,'exit':p.returncode,'error':p.stderr.strip(),**{k:d.get(k) for k in ['http_code','time_namelookup','time_connect','time_appconnect','time_starttransfer','time_total','remote_ip']}}
+          with concurrent.futures.ThreadPoolExecutor(max_workers=3) as ex:rows=list(ex.map(sample,urls))
+          report={'checked_at_utc':datetime.now(timezone.utc).isoformat(),'source_commit':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'location':'GitHub-hosted runner, not owner network','samples':rows}
+          Path('review-output/network.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: review-v8-snapshot-no-fonts
+          path: review-output/
+          retention-days: 7
