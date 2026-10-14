@@ -1,0 +1,38 @@
+name: Finalize v8 figure layout
+on:
+  push:
+    branches: ['gpt/site-evidence-v8-261014']
+    paths: ['.github/workflows/review-v8-finalize.yml']
+permissions:
+  contents: write
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/gpt/site-evidence-v8-261014'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gpt/site-evidence-v8-261014
+      - name: Refine the reviewed figure layout only
+        run: |
+          set -euo pipefail
+          BEFORE=$(git rev-parse HEAD)
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('styles.css');s=p.read_text();marker='/* Four thesis figures use a balanced two-by-two layout. */';assert marker not in s
+          s+='\n'+marker+'\n#initial-contact>.media{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}\n@media(max-width:720px){#initial-contact>.media{grid-template-columns:minmax(0,1fr)}}\n';p.write_text(s)
+          p=Path('.github/scripts/check_review.py');s=p.read_text()
+          old="page.screenshot(path=str(OUT/(name+'.png')),full_page=True)"
+          new="""page.locator('img').evaluate_all(\"images=>images.forEach(img=>img.loading='eager')\")
+                  page.evaluate(\"Promise.race([Promise.all(Array.from(document.images).map(img=>img.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,3000))])\")
+                  page.screenshot(path=str(OUT/(name+'.png')),full_page=True)"""
+          assert old in s;s=s.replace(old,new);p.write_text(s)
+          PY
+          python3 -m py_compile .github/scripts/check_review.py
+          git add styles.css .github/scripts/check_review.py
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Balance thesis figure grid and request lazy images before review screenshots'
+          test "$(git ls-remote origin refs/heads/gpt/site-evidence-v8-261014 | cut -f1)" = "$BEFORE"
+          git push origin HEAD:refs/heads/gpt/site-evidence-v8-261014
