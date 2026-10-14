@@ -1,4 +1,4 @@
-/* daeholee.me — site styles. Release 2026-10-14.3 */
+/* daeholee.me — site styles. Release 2026-10-14.4 */
 
 /* ---------- Tokens ---------- */
 :root{
@@ -159,7 +159,8 @@ main{min-height:60vh}
 .section-head p{color:var(--muted);max-width:52ch}
 
 /* ---------- Home ---------- */
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,320px);gap:clamp(32px,6vw,80px);align-items:start}
+.hero{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(260px,320px);gap:clamp(24px,4vw,56px);align-items:start}
+.portrait{width:clamp(120px,12vw,156px);height:auto;aspect-ratio:1;border-radius:26%;object-fit:cover;border:1px solid var(--line);background:var(--bg-2);margin-top:.5rem}
 .hero-text{min-width:0}
 .hero .role{margin-top:1.1rem;font-size:1.0625rem;font-weight:500;color:var(--ink-2)}
 .hero .role span{display:block;font-weight:400;color:var(--muted);font-size:var(--label);margin-top:.15rem}
@@ -194,6 +195,11 @@ main{min-height:60vh}
   color:var(--ink);transition:border-color .15s,transform .15s,box-shadow .15s;
 }
 .card:hover{border-color:var(--line-2);box-shadow:var(--shadow);transform:translateY(-1px)}
+.card .thumb{display:block;aspect-ratio:16/10;border-radius:var(--r-s);overflow:hidden;border:1px solid var(--line);background:var(--bg-2);margin-bottom:1.1rem}
+.card .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+.card:hover .thumb img{transform:scale(1.03)}
+.card .thumb.fit{background:#fff}
+.card .thumb.fit img{object-fit:contain;padding:10px}
 .card .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.02em;color:var(--muted);margin-bottom:.9rem}
 .card h3{font-size:1.2rem}
 .card p{margin-top:.6rem;color:var(--muted);font-size:var(--label);line-height:1.55}
@@ -215,14 +221,8 @@ a.chip:hover{border-color:var(--line-2);color:var(--ink)}
 
 /* ---------- Page heads ---------- */
 .page-head{display:grid;grid-template-columns:minmax(0,1fr);gap:28px;align-items:end;padding-bottom:clamp(24px,4vw,40px);border-bottom:1px solid var(--line)}
-.page-head.with-figure{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
 .page-head .lede{margin-top:1rem;max-width:34ch}
 .page-head .intro{margin-top:1rem;color:var(--ink-2);max-width:60ch}
-
-/* Schematic figure (SVG, theme-aware via currentColor) */
-.schematic{min-width:0}
-.schematic svg{display:block;width:100%;height:auto;color:var(--ink)}
-.schematic figcaption{margin-top:10px;font-size:var(--small);color:var(--muted);max-width:48ch}
 
 .section-nav{display:flex;flex-wrap:wrap;gap:8px;padding:clamp(16px,2.5vw,24px) 0 0}
 .section-nav a{
@@ -248,8 +248,15 @@ a.chip:hover{border-color:var(--line-2);color:var(--ink)}
 .cols strong{color:var(--ink)}
 .media{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px;margin-top:clamp(20px,3vw,28px)}
 .media.single{grid-template-columns:minmax(0,560px)}
+.media.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.media .yt{height:auto}
+figure.fig a{display:block}
+figure.fig img:hover{border-color:var(--line-2)}
 figure.fig{min-width:0}
-figure.fig img{width:100%;border-radius:var(--r-s);border:1px solid var(--line);background:var(--bg-2)}
+figure.fig img{width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;padding:6px;border-radius:var(--r-s);border:1px solid var(--line);background:#fff;transition:border-color .15s}
+figure.fig.cover img{object-fit:cover;padding:0;background:var(--bg-2)}
+figure.fig.cover img[src*="nerdlab-demo"]{object-position:50% 20%}
+.media.wide figure.fig img{aspect-ratio:16/9}
 figure.fig figcaption{margin-top:8px;font-size:var(--small);color:var(--muted)}
 
 /* Click-to-play video (thumbnail from the video host; the player loads on demand). */
@@ -287,6 +294,11 @@ figure.fig figcaption{margin-top:8px;font-size:var(--small);color:var(--muted)}
 .videos{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:16px;margin-top:clamp(18px,3vw,26px)}
 .videos>figure{min-width:0}
 
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:clamp(18px,3vw,26px)}
+.gallery a{display:block;min-width:0;border-radius:var(--r-s);overflow:hidden;border:1px solid var(--line);background:var(--bg-2)}
+.gallery img{width:100%;height:100%;aspect-ratio:1;object-fit:cover;transition:transform .35s ease}
+.gallery a:hover img{transform:scale(1.03)}
+
 /* ---------- Contact ---------- */
 .contact{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);margin-top:clamp(24px,4vw,40px)}
 .contact-card{border:1px solid var(--line);border-radius:var(--r);background:var(--bg-2);padding:clamp(22px,3vw,32px)}
@@ -315,7 +327,8 @@ figure.fig figcaption{margin-top:8px;font-size:var(--small);color:var(--muted)}
 
 /* ---------- Responsive ---------- */
 @media (max-width:1040px){
-  .hero{grid-template-columns:minmax(0,1fr) minmax(240px,280px);gap:36px}
+  .hero{grid-template-columns:auto minmax(0,1fr);gap:28px}
+  .facts{grid-column:1/-1;max-width:none}
   .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
   .cards .card:last-child:nth-child(odd){grid-column:1/-1}
 }
@@ -329,19 +342,22 @@ figure.fig figcaption{margin-top:8px;font-size:var(--small);color:var(--muted)}
   .site-nav a{min-height:48px;font-size:1.0625rem;border-radius:var(--r-s);padding:0 12px}
   html:not(.js) .header-row{flex-wrap:wrap}
   html:not(.js) .site-nav{flex-wrap:wrap;width:100%;padding-bottom:8px}
-  .page-head.with-figure{grid-template-columns:minmax(0,1fr)}
-  .page-head.with-figure .schematic{max-width:560px}
   .cols{grid-template-columns:minmax(0,1fr);gap:16px}
   .contact{grid-template-columns:minmax(0,1fr)}
+  .media.three{grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))}
 }
 @media (max-width:720px){
-  .hero{grid-template-columns:minmax(0,1fr);gap:28px}
-  .facts{max-width:520px}
+  .hero{grid-template-columns:minmax(0,1fr);gap:22px}
+  .portrait{width:112px;margin-top:0}
+  .facts{max-width:none}
   .cards{grid-template-columns:minmax(0,1fr)}
   .cards .card:last-child:nth-child(odd){grid-column:auto}
   .timeline li{grid-template-columns:56px minmax(0,1fr);gap:14px}
   .pub{grid-template-columns:40px minmax(0,1fr);gap:12px}
   .pager{flex-direction:row}
+}
+@media (max-width:560px){
+  .gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:420px){
   :root{--gutter:16px}
