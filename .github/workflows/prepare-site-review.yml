@@ -1,0 +1,35 @@
+name: Prepare review branch
+on:
+  push:
+    branches: ['gpt/site-review-261014']
+    paths: ['.github/workflows/prepare-site-review.yml']
+permissions:
+  contents: write
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/gpt/site-review-261014'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gpt/site-review-261014
+          fetch-depth: 2
+      - name: Apply reviewed edits without touching main
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git branch --show-current)" = "gpt/site-review-261014"
+          BEFORE=$(git rev-parse HEAD)
+          python3 .github/scripts/prepare_site_review.py
+          node --check app.js
+          node --check theme-init.js
+          python3 -m py_compile .github/scripts/check_frontend.py .github/scripts/check_review.py
+          git rm .github/scripts/prepare_site_review.py .github/workflows/prepare-site-review.yml
+          git add index.html research.html publications.html personal.html contact.html styles.css app.js theme-init.js release.json .github/scripts/check_frontend.py .github/workflows/check-frontend.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Refine research copy and figures; improve responsive layout and resilient navigation (2026-10-14.6)'
+          REMOTE=$(git ls-remote origin refs/heads/gpt/site-review-261014 | cut -f1)
+          test "$REMOTE" = "$BEFORE"
+          git push origin HEAD:refs/heads/gpt/site-review-261014
