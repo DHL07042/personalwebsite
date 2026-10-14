@@ -21,7 +21,7 @@ jobs:
           from datetime import datetime, timezone
           from playwright.sync_api import sync_playwright
           base='https://daeholee.me/'
-          expected='2026-10-14.2'
+          expected='2026-10-14.3'
           for attempt in range(18):
               try:
                   with urllib.request.urlopen(base+'release.json?check='+str(time.time()),timeout=15) as r:
@@ -38,22 +38,22 @@ jobs:
               page.on('pageerror',lambda e:report['pageerrors'].append(str(e)))
               page.goto(base,wait_until='domcontentloaded')
               page.wait_for_selector('html.js')
-              report['checks']['first_visit_light']=page.get_attribute('html','data-theme')=='light'
+              report['checks']['first_visit_follows_system']=page.get_attribute('html','data-theme') is None
               for width in [320,390,820,1440]:
                   page.set_viewport_size({'width':width,'height':1000})
                   for fn in ['index.html','research.html','publications.html','personal.html','contact.html']:
                       response=page.goto(base+fn,wait_until='domcontentloaded')
                       page.wait_for_selector('html.js')
                       for mode in ['light','dark']:
-                          page.select_option('#theme-select',mode)
+                          page.click('.theme-control button[data-theme-value="'+mode+'"]')
                           row=page.evaluate('''()=>({overflow:document.documentElement.scrollWidth>innerWidth+1,theme:document.documentElement.dataset.theme,bodyFont:getComputedStyle(document.body).fontSize,navFont:getComputedStyle(document.querySelector('.site-nav')).fontSize})''')
                           row.update(page=fn,width=width,mode=mode,status=response.status)
                           report['matrix'].append(row)
-              page.goto(base,wait_until='domcontentloaded');page.select_option('#theme-select','dark');page.reload(wait_until='domcontentloaded');page.wait_for_selector('html.js')
+              page.goto(base,wait_until='domcontentloaded');page.click('.theme-control button[data-theme-value="dark"]');page.reload(wait_until='domcontentloaded');page.wait_for_selector('html.js')
               report['checks']['theme_reload']=page.get_attribute('html','data-theme')=='dark'
               page.goto(base+'research.html',wait_until='domcontentloaded');page.wait_for_selector('html.js')
               report['checks']['theme_across_pages']=page.get_attribute('html','data-theme')=='dark'
-              page.select_option('#theme-select','system');page.emulate_media(color_scheme='light');page.wait_for_timeout(100)
+              page.click('.theme-control button[data-theme-value="system"]');page.emulate_media(color_scheme='light');page.wait_for_timeout(100)
               report['checks']['system_light']=page.get_attribute('html','data-theme')=='light'
               page.emulate_media(color_scheme='dark');page.wait_for_timeout(100)
               report['checks']['system_dark']=page.get_attribute('html','data-theme')=='dark'
@@ -63,17 +63,17 @@ jobs:
               page.locator('.menu-toggle').click();page.locator('#site-nav a[href="contact.html"]').click();page.wait_for_url('**/contact.html')
               report['checks']['mobile_link_navigation']=page.url.endswith('/contact.html')
               page.goto(base+'personal.html',wait_until='domcontentloaded')
-              report['checks']['video_frames_and_fallback_links']=page.locator('iframe').count()==3 and page.locator('a[href*="youtube.com/watch"]').count()==3
-              report['iframe_sources']=page.locator('iframe').evaluate_all('(es)=>es.map(e=>({src:e.src,title:e.title,width:e.clientWidth,height:e.clientHeight}))')
+              report['checks']['video_boxes_and_fallback_links']=page.locator('.yt').count()==3 and page.locator('a[href*="youtube.com/watch"]').count()==3
+              report['video_sources']=page.locator('.yt').evaluate_all('(es)=>es.map(e=>({id:e.dataset.id,title:e.dataset.title,width:e.clientWidth,height:e.clientHeight}))')
               for name,width,fn,mode in [('desktop',1440,'index.html','light'),('phone',390,'index.html','light'),('dark',1440,'index.html','dark'),('media',1440,'personal.html','light')]:
-                  page.set_viewport_size({'width':width,'height':1000});page.goto(base+fn,wait_until='domcontentloaded');page.select_option('#theme-select',mode);page.wait_for_timeout(500)
+                  page.set_viewport_size({'width':width,'height':1000});page.goto(base+fn,wait_until='domcontentloaded');page.click('.theme-control button[data-theme-value="'+mode+'"]');page.wait_for_timeout(500)
                   page.screenshot(path='browser-report/'+name+'.png',full_page=True)
               nc=browser.new_context(java_script_enabled=False,viewport={'width':390,'height':844});np=nc.new_page();np.goto(base,wait_until='domcontentloaded')
               report['checks']['no_js_nav_readable']=all(np.locator('#site-nav a').nth(i).is_visible() for i in range(5))
               report['checks']['no_js_no_overflow']=np.evaluate('document.documentElement.scrollWidth<=innerWidth+1')
               browser.close()
           report['pass']=all(report['checks'].values()) and all(not r['overflow'] and r['status']==200 and r['theme']==r['mode'] for r in report['matrix']) and not report['pageerrors']
-          report['limits']=['Chromium only, no physical devices.','Video elements and original URLs checked; complete video playback and copyright clearance are not tested.','www TLS is diagnosed separately.']
+          report['limits']=['Chromium only, no physical devices.','Video boxes and original URLs checked; playback itself is not tested.','www TLS is diagnosed separately.']
           Path('browser-report/report.json').write_text(json.dumps(report,indent=2))
           print('BROWSER_REPORT_BEGIN');print(json.dumps(report,indent=2));print('BROWSER_REPORT_END')
           if not report['pass']: raise SystemExit('Frontend verification failed; inspect report.')
