@@ -44,9 +44,10 @@ import hashlib
 media=json.loads(Path('media-processing.json').read_text())
 checks['media_manifest_integrity']=all(hashlib.sha256(Path(x['source']).read_bytes()).hexdigest()==x['source_sha256'] and hashlib.sha256(Path(x['output']).read_bytes()).hexdigest()==x['output_sha256'] and x['decoded_pixel_equality'] for x in media['assets'])
 checks['t1_byline_matches_supplied_sources']='<strong>D. Lee</strong>, K. Kong, and H. Choi' in Path('publications.html').read_text().split('id="T1"')[1]
-checks['t1_scope_is_not_fully_crossed']='for one participant, plus examples from two additional participants' in research
+# Research 01 presents the published record (J1) and states the ISPS 2021 lineage once (release 2026-10-15.1).
+checks['t1_lineage_sentence_retained']='presented at ASME ISPS 2021 [T1] and subsequently reported in JKSPE [J1]' in research
 checks['grf_owner_mapping_retained']='off (Case I), weak (Case II) and strong (Case III)' in research
-checks['t1_provenance_retained']=research.count('[T1]')>=6
+checks['research01_figures_cite_published_record']=research.count('[J1, Fig.')>=3 and 't1-' not in research and 'CC BY' in research
 report={'base':BASE,'checks':checks,'broken_links':broken,'text_zoom':[],'limits':['Chromium viewport tests; not physical devices.','No guarantee of Internet tail latency or full video playback.']}
 with sync_playwright() as p:
     browser=p.chromium.launch()

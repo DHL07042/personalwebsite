@@ -430,3 +430,9 @@ figure.fig a[data-lightbox],.gallery a[data-lightbox]{cursor:zoom-in}
 /* Four thesis figures use a balanced two-by-two layout. */
 #initial-contact>.media{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
 @media(max-width:720px){#initial-contact>.media{grid-template-columns:minmax(0,1fr)}}
+
+/* Release 2026-10-15.1 */
+.timeline .honor{font-weight:500;color:var(--ink)}
+.fig-credit{margin-top:.6rem;font-size:var(--small);color:var(--muted)}
+.timeline li{grid-template-columns:84px minmax(0,1fr)}
+@media (max-width:720px){.timeline li{grid-template-columns:70px minmax(0,1fr)}}
