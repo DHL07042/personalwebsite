@@ -30,6 +30,7 @@ PR descriptions, comments, committed files and CI logs are public in this reposi
 ## Evidence boundaries
 - ADD: affiliation, title and dates only until the owner approves additional public wording.
 - Preserve publication titles, author order and status. Separate journal articles, proceedings, presentations and manuscripts in preparation. Do not imply unrelated studies merely because entries are separate.
+- T1 (ISPS 2021 presentation) and J1 (JKSPE 2026 article) are the same line of work; the site says so in one sentence ("first presented at ASME ISPS 2021"). Do not remove that lineage and do not add authorship commentary.
 - Preserve WalkON Suit 4 in site prose. Published titles and quotations retain their original form; Roman/Arabic numeral variants alone are not different robots.
 - Do not reframe preliminary comparisons as quantitative agreement, accuracy validation or clinical benefit without the relevant result.
 - Do not add claims from an old research conversation to the current manuscript summary. Obtain the current approved research-status bridge for new numerical results.
@@ -37,7 +38,9 @@ PR descriptions, comments, committed files and CI logs are public in this reposi
 ## Media and provenance
 - Use only owner-provided/approved photographs and diagrams. Existing assets are not a blanket license for new third-party materials. Do not recreate missing scientific axes or results with generated graphics.
 - YouTube videos use the original AFN Pacific and CYBATHLON uploads via click-to-play players; do not download or rehost them. The Nerd Lab clip is an owner-supplied local MP4/WebM asset, not a YouTube file.
-- In the proposed 2026-10-14.6 release, gait-distance.webp and gait-phases.webp are held out of the rendered page because the files themselves crop graph content and lack sufficient signal context. grf-results.webp is held pending a caption tied to the current approved analysis and its original Case I/II/III labels. The image files are retained unchanged; this is not a revision of the research findings.
+- gait-distance.webp and gait-phases.webp (crops of an unpublished PSAO analysis) stay off the rendered page. Their uncropped sources, and the other unused originals from the previous site, are kept in assets/src for reference.
+- Project 01, part 1 uses three figures from the owner's ASME ISPS 2021 presentation deck [T1] (t1-shoe, t1-threshold, t1-phases). Captions cite [T1]; do not attribute them to J1.
+- grf-results.webp is shown with the owner-supplied condition mapping (release 2026-10-14.7): Case I = virtual-spring pre-tuning off, Case II = weak, Case III = strong; the manuscript in preparation calls these FDL off/weak/strong. The caption states conditions only, not an effect.
 - The M20 multi-panel photograph is not a decorative photo: display all panels. The thesis concept diagram uses (a) walking model, (b) flexion/extension, (c) stance/swing configurations.
 
 ## Checks

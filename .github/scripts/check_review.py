@@ -35,7 +35,9 @@ for fn in PAGES:
     checks['bootstrap_source_consistency'] &= bool(m and m.group(1).strip()==bootstrap and not re.search(r'<script[^>]+src="theme-init',s))
 checks['bootstrap_does_not_hide_navigation']='classList' not in bootstrap
 research=Path('research.html').read_text()
-checks['held_figures_not_rendered']=all(n not in research for n in ['gait-distance.webp','gait-phases.webp','grf-results.webp'])
+# The two PSAO crops stay off the page (uncropped sources are in assets/src). grf-results.webp was
+# restored in release 2026-10-14.7 with the owner's condition mapping (Case I/II/III = pre-tuning off/weak/strong).
+checks['held_figures_not_rendered']=all(n not in research for n in ['gait-distance.webp','gait-phases.webp'])
 checks['held_assets_preserved']=all(Path('assets/img',n).is_file() for n in ['gait-distance.webp','gait-phases.webp','grf-results.webp'])
 report={'base':BASE,'checks':checks,'broken_links':broken,'text_zoom':[],'limits':['Chromium viewport tests; not physical devices.','No guarantee of Internet tail latency or full video playback.']}
 with sync_playwright() as p:
