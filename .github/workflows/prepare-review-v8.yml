@@ -1,0 +1,31 @@
+name: Prepare evidence review v8
+on:
+  push:
+    branches: ['gpt/site-evidence-v8-261014']
+    paths: ['.github/workflows/prepare-review-v8.yml']
+permissions:
+  contents: write
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/gpt/site-evidence-v8-261014'
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gpt/site-evidence-v8-261014
+      - name: Prepare source and lossless display assets
+        run: |
+          set -euo pipefail
+          BEFORE=$(git rev-parse HEAD)
+          python3 -m pip install Pillow==11.3.0
+          python3 .github/scripts/prepare_review_v8.py
+          node --check app.js
+          python3 -m py_compile .github/scripts/check_review.py
+          git rm .github/scripts/prepare_review_v8.py
+          git add index.html research.html publications.html personal.html contact.html styles.css release.json MAINTAINING.md media-processing.json .github/scripts/check_review.py assets/img/*-display.webp
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Improve figure fidelity and research scope; align T1 reference with supplied bylines (2026-10-14.8)'
+          test "$(git ls-remote origin refs/heads/gpt/site-evidence-v8-261014 | cut -f1)" = "$BEFORE"
+          git push origin HEAD:refs/heads/gpt/site-evidence-v8-261014
