@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="site-release" content="2026-10-14.5">
+<meta name="site-release" content="2026-10-14.6">
 <title>Daeho Lee</title>
 <meta name="description" content="Daeho Lee — researcher at the Agency for Defense Development; sensing and control at the foot⁠–⁠ground and human⁠–⁠robot interfaces of wearable robots, from KAIST’s Exo Lab.">
 <link rel="canonical" href="https://daeholee.me/">
@@ -21,9 +21,17 @@
 <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101620'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='system-ui,sans-serif' font-size='34' font-weight='600' fill='%23fff'%3ED%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="assets/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<script src="theme-init.js?v=2026-10-14.5"></script>
-<link rel="stylesheet" href="styles.css?v=2026-10-14.5">
-<script src="app.js?v=2026-10-14.5" defer></script>
+<script id="theme-bootstrap">
+(function(){
+  'use strict';
+  var root=document.documentElement,pref='system';
+  try{var s=localStorage.getItem('dhl-portfolio-theme-v1');if(s==='light'||s==='dark'||s==='system')pref=s;}catch(e){}
+  root.setAttribute('data-theme-preference',pref);
+  if(pref==='system')root.removeAttribute('data-theme');else root.setAttribute('data-theme',pref);
+})();
+</script>
+<link rel="stylesheet" href="styles.css?v=2026-10-14.6">
+<script src="app.js?v=2026-10-14.6" defer></script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person","name":"Daeho Lee","url":"https://daeholee.me/","image":"https://daeholee.me/assets/img/portrait.webp","jobTitle":"Researcher","worksFor":{"@type":"Organization","name":"Agency for Defense Development"},"alumniOf":{"@type":"CollegeOrUniversity","name":"KAIST"},"email":"mailto:dhlee07042@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Daejeon","addressCountry":"KR"}}
 </script>
@@ -59,8 +67,8 @@
       <p class="role">Researcher, Agency for Defense Development (ADD)<span>Daejeon, South Korea</span></p>
       <p class="lede">I work on sensing and control at the foot⁠–⁠ground and human⁠–⁠robot interfaces of wearable robots.</p>
       <div class="bio prose">
-        <p>At KAIST’s Exo Lab, with Prof.&nbsp;Kyoungchul Kong, I built foot⁠–⁠ground distance and contact-force sensing hardware, integrated it into powered exoskeletons, and ran the experiments behind the publications on this site: how a robot can sense the ground before contact, manage the load at contact, and read the intention of the person wearing it. I received my B.S. (2020) and M.S. (2022) in mechanical engineering from KAIST.</p>
-        <p>My interests are gait-phase estimation, contact-aware load modulation, and human-intention recognition, for wearable robots and for legged robots that face the same contact problems.</p>
+        <p>At KAIST’s Exo Lab, I worked with Prof.&nbsp;Kyoungchul Kong on sensor development and experimental evaluation of powered exoskeletons. My contributions included distance- and force-sensing hardware, robot integration, and walking experiments. I received my B.S. (2020) and M.S. (2022) in mechanical engineering from KAIST.</p>
+        <p>My research interests include gait-phase estimation, contact-aware load modulation, and human-intention recognition in wearable robots. I am also interested in sensing and control for legged locomotion.</p>
       </div>
       <div class="actions">
         <a class="btn primary" href="research.html">Research <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -83,7 +91,7 @@
   <section class="section" aria-labelledby="research-title">
     <div class="section-head">
       <h2 id="research-title">Research</h2>
-      <p>Three lines of work from KAIST, each with hardware I built and experiments I ran.</p>
+      <p>Selected projects in sensing, instrumentation, and robot integration.</p>
     </div>
     <div class="cards">
       <a class="card" href="research.html#gait-phase">

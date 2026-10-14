@@ -1,0 +1,68 @@
+name: Review diagnostics
+on:
+  push:
+    branches: ['gpt/site-review-261014']
+    paths: ['.github/workflows/review-diagnostics.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Record source snapshot without font binaries
+        run: |
+          mkdir -p review-output
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          import subprocess,json
+          root=Path('.')
+          files=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+          with ZipFile('review-output/site-source-no-fonts.zip','w',ZIP_DEFLATED) as z:
+              for name in files:
+                  if not name or Path(name).suffix.lower() in {'.woff','.woff2','.ttf','.otf'}:continue
+                  z.write(name,name)
+          Path('review-output/source.json').write_text(json.dumps({'commit':subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),'release':json.loads(Path('release.json').read_text())},indent=2))
+          PY
+      - name: Sample public navigation timings and certificates
+        run: |
+          python3 - <<'PY'
+          import json,subprocess,socket,ssl,time,random,concurrent.futures
+          from pathlib import Path
+          from datetime import datetime,timezone
+          hosts=['daeholee.me','www.daeholee.me']
+          tls=[]
+          for host in hosts:
+              row={'host':host}
+              try:
+                  row['addresses']=sorted({x[4][0] for x in socket.getaddrinfo(host,443,type=socket.SOCK_STREAM)})
+                  with socket.create_connection((host,443),timeout=10) as s:
+                      with ssl.create_default_context().wrap_socket(s,server_hostname=host) as t:
+                          row.update(valid=True,san=t.getpeercert().get('subjectAltName'))
+              except Exception as e:row.update(valid=False,error=str(e))
+              tls.append(row)
+          paths=['','contact.html','research.html','publications.html','personal.html']
+          tasks=[('https://daeholee.me/'+p,None) for _ in range(8) for p in paths]
+          tasks+=[('https://www.daeholee.me/',None)]*3
+          random.Random(1).shuffle(tasks)
+          def sample(task):
+              url,ip=task
+              cmd=['curl','--silent','--show-error','--location','--max-time','20','--output','/dev/null','--write-out','%{json}',url]
+              p=subprocess.run(cmd,capture_output=True,text=True,timeout=23)
+              try:d=json.loads(p.stdout)
+              except Exception:d={}
+              return {'url':url,'exit':p.returncode,'error':p.stderr.strip(),**{k:d.get(k) for k in ['http_code','remote_ip','http_version','time_namelookup','time_connect','time_appconnect','time_starttransfer','time_total','num_redirects','size_download']}}
+          with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:rows=list(pool.map(sample,tasks))
+          report={'checked_at_utc':datetime.now(timezone.utc).isoformat(),'location':'GitHub-hosted Ubuntu runner; not the owner network','tls':tls,'samples':rows}
+          Path('review-output/network.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: review-diagnostics-no-fonts
+          path: review-output/
+          retention-days: 7

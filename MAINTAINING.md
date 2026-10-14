@@ -1,26 +1,47 @@
 # Website maintenance
 
-Applies only to DHL07042/personalwebsite, not to CV or application-document editing.
+Applies only to DHL07042/personalwebsite. CVs, manuscripts and application records have their own editors and approval paths.
 
-## Source of truth and collaboration
-- Read the current `main` commit and the files you will edit before making changes. The deployed website is the visual review surface; the commit diff is the record of what changed.
-- One active editor per change set. Work from a branch and open a pull request; the "Checked-out files" job validates the branch itself, so a red check on a PR means the PR is broken, not that the deployment is pending. After a merge to main, the "Deployed site" job waits for GitHub Pages and validates the live site.
-- Keep page filenames and anchor IDs stable: `gait-phase`, `initial-contact`, `force-sensing`, `cybathlon`, `experimental-systems`, `venture`, `J1`–`J5`, `C1`, `M1`, `T1`. Keep `CNAME` as `daeholee.me` unless the owner asks for a domain change.
-- When site files change, bump `release.json` and the matching `site-release` meta and `?v=` query strings on `styles.css`, `app.js` and `theme-init.js`.
-- Keep the site dependency-light: static HTML, one stylesheet, two small scripts. Fonts come from Google Fonts with system fallbacks; nothing else is loaded from third parties until a viewer starts a video.
+## Review loop
+1. Read the latest main commit, release.json, relevant files and previous PR. Compare the deployed site with that release; do not assume an attachment or older ZIP is current.
+2. Record the owner's new requests, independently inspect the source/figures/public references, and distinguish facts, interpretations and missing evidence.
+3. One editor per change set. Work on a branch and open a PR; never push main or merge without the owner's approval. Explain any proposed reversal of an approved decision.
+4. Run the Checked-out files job on the PR. Review screenshots as well as the test report. A passing viewport test does not establish usability on every device or fast service on every network.
+5. After an approved merge, inspect the Deployed site result and live release. Record the change IDs, evidence, tests and remaining decisions for the next editor. Another model's agreement is not factual evidence.
 
-## Design rules
-- Appearance follows the system by default; the header control stores an explicit Light / Dark / System choice in `localStorage` (`dhl-portfolio-theme-v1`). In System mode the `data-theme` attribute is absent and `prefers-color-scheme` applies.
-- Links: no underline + blue + arrow stacks. Running-text links use `.prose a` (hairline underline); external links add `.ext` for the small glyph; actions are `.btn` pills.
-- Type sizes are fluid (`clamp()`); check 320, 390, 768, 820, 1024 and 1440 px in both themes before reporting.
-- Hedge once: state the number of participants and the test condition one time per study, in plain words. Do not restate that a result belongs to the team or that the site omits work details.
+PR descriptions, comments, committed files and CI logs are public in this repository. Keep private correspondence, employment-clearance discussions and unpublished research review details outside the repository. Seven-day artifact retention is not seven-day retention of all repository history or logs.
 
-## Content boundaries
-- Current employment appears as affiliation, title and dates only. Work-specific information is not published.
-- Keep the distinction between individual contributions and team results, and between journal articles, conference papers, manuscripts in preparation and presentations. Do not invent responsibilities, statuses or results.
-- Do not publish draft CV PDFs, private review notes, source archives, credentials or internal screenshots.
+## Stable structure and release
+- Preserve page filenames and anchor IDs: gait-phase, initial-contact, force-sensing, cybathlon, experimental-systems, venture, J1–J5, C1, M1, T1.
+- Preserve CNAME = daeholee.me. DNS/TLS configuration is separate from source changes; do not rewrite working DNS records based only on a timeout report.
+- Change release.json, HTML site-release metadata and CSS/app.js cache keys together. Do not show the release identifier in the visitor-facing footer.
+- The small theme bootstrap is inline before CSS to avoid a network fetch before body parsing. Its source is theme-init.js; copy that exact text into script#theme-bootstrap in every page when changing it. CI checks equality. Only app.js sets the js class after enhancement handlers are attached.
+- Static HTML, CSS and native JavaScript; no analytics or service worker. Geist and Geist Mono are self-hosted under assets/fonts with their license. YouTube thumbnail requests remain external; players load on click.
 
-## Media
-- Videos are click-to-play: the page shows the host's thumbnail and creates the YouTube player only when a viewer clicks. Current IDs: `jl-wEJFMYxY`, `QEO1ogYnKEI`, `ytGybgT78Us` (AFN Korea samples) and `mIbaOjXYxHs` (CYBATHLON 2020 broadcast). No video file is hosted here.
-- The research-page figure is an original SVG schematic, not data from a paper.
-- Photographs go in `assets/img/` only when the owner supplies them: research photos cropped 4:3, personal photos 1:1, each with a caption; keep files under about 300 KB.
+## Approved design contract
+- Default appearance: System, with no data-theme attribute in System mode. Preserve the three icon buttons and persistent preference.
+- Preserve quiet links, small external-link icons, pill buttons, three Home project cards, timeline, and At a glance. Do not reintroduce a defensive Current employment block.
+- Body 17–18px, navigation 17px, labels 16px, chips 13.6px, footer 16px. Reflow instead of shrinking text to fix wrapping. Protect short compound terms, not entire sentences.
+- Research order: distance sensing (gait-phase, then initial-contact), instrumentation, WalkON/CYBATHLON, experimental systems, student-led project.
+- Limitations once per study. Keep measured results distinct from individual contributions without repetitive disclaimers.
+- Images open in a keyboard-accessible lightbox. Scientific plots and composite panels use contain; crop only ordinary photographs where no evidence is lost.
+- Preserve the Samsung internship, exact YouTube titles, and the small Nerd Lab video loop with a pause control. Default motion must respect reduced-motion preferences.
+
+## Evidence boundaries
+- ADD: affiliation, title and dates only until the owner approves additional public wording.
+- Preserve publication titles, author order and status. Separate journal articles, proceedings, presentations and manuscripts in preparation. Do not imply unrelated studies merely because entries are separate.
+- Preserve WalkON Suit 4 in site prose. Published titles and quotations retain their original form; Roman/Arabic numeral variants alone are not different robots.
+- Do not reframe preliminary comparisons as quantitative agreement, accuracy validation or clinical benefit without the relevant result.
+- Do not add claims from an old research conversation to the current manuscript summary. Obtain the current approved research-status bridge for new numerical results.
+
+## Media and provenance
+- Use only owner-provided/approved photographs and diagrams. Existing assets are not a blanket license for new third-party materials. Do not recreate missing scientific axes or results with generated graphics.
+- YouTube videos use the original AFN Pacific and CYBATHLON uploads via click-to-play players; do not download or rehost them. The Nerd Lab clip is an owner-supplied local MP4/WebM asset, not a YouTube file.
+- In the proposed 2026-10-14.6 release, gait-distance.webp and gait-phases.webp are held out of the rendered page because the files themselves crop graph content and lack sufficient signal context. grf-results.webp is held pending a caption tied to the current approved analysis and its original Case I/II/III labels. The image files are retained unchanged; this is not a revision of the research findings.
+- The M20 multi-panel photograph is not a decorative photo: display all panels. The thesis concept diagram uses (a) walking model, (b) flexion/extension, (c) stance/swing configurations.
+
+## Checks
+- PR: checked-out source on a local server. Main only: deployed site after release agreement.
+- Check viewport widths including narrow phone, opened foldable, tablet, laptop and large desktop, both themes, enlarged text, theme persistence, no-JS/failed-JS navigation, and lightbox focus/closure.
+- Green CI does not prove DNS/TLS correctness or complete video playback. Read the actual reports and flag untested scope.
+- Network reports should distinguish DNS/connect/TLS/server response from browser parsing/resources. A fast overseas runner does not disprove a slow visit on the owner's network.
