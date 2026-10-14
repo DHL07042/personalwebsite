@@ -15,18 +15,21 @@ jobs:
         with:
           ref: gpt/site-review-261014
           fetch-depth: 2
-      - name: Apply reviewed edits without touching main
+      - name: Apply website content edits on the review branch
         shell: bash
         run: |
           set -euo pipefail
           test "$(git branch --show-current)" = "gpt/site-review-261014"
           BEFORE=$(git rev-parse HEAD)
           python3 .github/scripts/prepare_site_review.py
+          # The runner is allowed to write contents, not workflow configuration.
+          # Workflow changes are reviewed separately through the repository connector.
+          git restore .github/workflows/check-frontend.yml
           node --check app.js
           node --check theme-init.js
           python3 -m py_compile .github/scripts/check_frontend.py .github/scripts/check_review.py
-          git rm .github/scripts/prepare_site_review.py .github/workflows/prepare-site-review.yml
-          git add index.html research.html publications.html personal.html contact.html styles.css app.js theme-init.js release.json .github/scripts/check_frontend.py .github/workflows/check-frontend.yml
+          git rm .github/scripts/prepare_site_review.py
+          git add index.html research.html publications.html personal.html contact.html styles.css app.js theme-init.js release.json .github/scripts/check_frontend.py
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'Refine research copy and figures; improve responsive layout and resilient navigation (2026-10-14.6)'
