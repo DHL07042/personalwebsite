@@ -24,9 +24,7 @@ jobs:
           s+='\n'+marker+'\n#initial-contact>.media{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}\n@media(max-width:720px){#initial-contact>.media{grid-template-columns:minmax(0,1fr)}}\n';p.write_text(s)
           p=Path('.github/scripts/check_review.py');s=p.read_text()
           old="page.screenshot(path=str(OUT/(name+'.png')),full_page=True)"
-          new="""page.locator('img').evaluate_all(\"images=>images.forEach(img=>img.loading='eager')\")
-                  page.evaluate(\"Promise.race([Promise.all(Array.from(document.images).map(img=>img.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,3000))])\")
-                  page.screenshot(path=str(OUT/(name+'.png')),full_page=True)"""
+          new="page.locator('img').evaluate_all(\"images=>images.forEach(img=>img.loading='eager')\")"+'\n        '+"page.evaluate(\"Promise.race([Promise.all(Array.from(document.images).map(img=>img.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,3000))])\")"+'\n        '+old
           assert old in s;s=s.replace(old,new);p.write_text(s)
           PY
           python3 -m py_compile .github/scripts/check_review.py
