@@ -25,7 +25,9 @@ jobs:
         env:
           BASE: http://127.0.0.1:8000/
           REPORT_DIR: browser-report-source
-        run: python3 .github/scripts/check_frontend.py
+        run: |
+          python3 .github/scripts/check_frontend.py
+          python3 .github/scripts/check_review.py
       - name: Upload screenshots and results
         if: always()
         uses: actions/upload-artifact@v4
@@ -35,7 +37,7 @@ jobs:
           retention-days: 7
   live-check:
     name: Deployed site
-    if: github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: source-check
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -51,7 +53,9 @@ jobs:
           LIVE: "1"
           WAIT_SECONDS: "420"
           REPORT_DIR: browser-report-live
-        run: python3 .github/scripts/check_frontend.py
+        run: |
+          python3 .github/scripts/check_frontend.py
+          python3 .github/scripts/check_review.py
       - name: Upload screenshots and results
         if: always()
         uses: actions/upload-artifact@v4
