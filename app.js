@@ -1,16 +1,73 @@
-/* Progressive enhancement: links and video players work without this file. */
-(function(){'use strict';
- const root=document.documentElement,sel=document.getElementById('theme-select');
- const mq=window.matchMedia('(prefers-color-scheme: dark)'), key='dhl-portfolio-theme-v1';
- let pref=['light','dark','system'].includes(root.dataset.themePreference)?root.dataset.themePreference:'light';
- function apply(){root.dataset.themePreference=pref;root.dataset.theme=pref==='system'?(mq.matches?'dark':'light'):pref;if(sel)sel.value=pref;}
- if(sel)sel.addEventListener('change',()=>{pref=sel.value;try{localStorage.setItem(key,pref);}catch(e){}apply();});
- const onSystem=()=>{if(pref==='system')apply();};if(mq.addEventListener)mq.addEventListener('change',onSystem);else mq.addListener(onSystem);
- window.addEventListener('storage',e=>{if(e.key===key){pref=['light','dark','system'].includes(e.newValue)?e.newValue:'light';apply();}});
- const nav=document.getElementById('site-nav'),button=document.querySelector('.menu-toggle');
- function close(focus){if(nav)nav.dataset.open='false';if(button){button.setAttribute('aria-expanded','false');if(focus)button.focus();}}
- if(button&&nav){button.addEventListener('click',()=>{const open=nav.dataset.open!=='true';nav.dataset.open=String(open);button.setAttribute('aria-expanded',String(open));});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>close(false)));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav.dataset.open==='true')close(true);});document.addEventListener('click',e=>{if(!e.target.closest('.header-controls'))close(false);});}
- const copy=document.querySelector('[data-copy]'),status=document.getElementById('copy-status');
- if(copy)copy.addEventListener('click',async()=>{try{if(!navigator.clipboard)throw Error('Unavailable');await navigator.clipboard.writeText(copy.dataset.copy);status.textContent='Email address copied.';}catch(e){status.textContent=copy.dataset.copy;}});
- apply();root.classList.add('js');
+(function(){
+  'use strict';
+  var root=document.documentElement,KEY='dhl-portfolio-theme-v1';
+  var VALID=['light','dark','system'];
+
+  /* Theme */
+  var pref=root.getAttribute('data-theme-preference');
+  if(VALID.indexOf(pref)===-1)pref='system';
+  var buttons=Array.prototype.slice.call(document.querySelectorAll('.theme-control button[data-theme-value]'));
+  function apply(){
+    root.setAttribute('data-theme-preference',pref);
+    if(pref==='system')root.removeAttribute('data-theme');else root.setAttribute('data-theme',pref);
+    buttons.forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-theme-value')===pref));});
+  }
+  buttons.forEach(function(b){
+    b.addEventListener('click',function(){
+      pref=b.getAttribute('data-theme-value');
+      try{localStorage.setItem(KEY,pref);}catch(e){}
+      apply();
+    });
+  });
+  window.addEventListener('storage',function(e){
+    if(e.key===KEY){pref=VALID.indexOf(e.newValue)!==-1?e.newValue:'system';apply();}
+  });
+  apply();
+
+  /* Mobile menu */
+  var nav=document.getElementById('site-nav'),toggle=document.querySelector('.menu-toggle');
+  function setOpen(open){
+    if(!nav||!toggle)return;
+    nav.setAttribute('data-open',String(open));
+    toggle.setAttribute('aria-expanded',String(open));
+  }
+  if(nav&&toggle){
+    toggle.addEventListener('click',function(){setOpen(nav.getAttribute('data-open')!=='true');});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&nav.getAttribute('data-open')==='true'){setOpen(false);toggle.focus();}});
+    document.addEventListener('click',function(e){if(!e.target.closest('.header-controls'))setOpen(false);});
+    window.addEventListener('resize',function(){if(window.innerWidth>880)setOpen(false);});
+  }
+
+  /* Click-to-play video: the player is created only when the viewer asks for it. */
+  Array.prototype.forEach.call(document.querySelectorAll('.yt[data-id]'),function(box){
+    var link=box.querySelector('a');
+    if(!link)return;
+    link.addEventListener('click',function(e){
+      e.preventDefault();
+      var id=box.getAttribute('data-id'),title=box.getAttribute('data-title')||'Video';
+      var f=document.createElement('iframe');
+      f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?autoplay=1&playsinline=1&rel=0';
+      f.title=title;
+      f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.setAttribute('allowfullscreen','');
+      f.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+      box.innerHTML='';
+      box.appendChild(f);
+    });
+  });
+
+  /* Copy buttons */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-copy]'),function(btn){
+    var status=document.getElementById(btn.getAttribute('aria-describedby')||'')||null;
+    var label=btn.textContent;
+    function say(t){if(status)status.textContent=t;}
+    btn.addEventListener('click',function(){
+      var text=btn.getAttribute('data-copy');
+      function done(){btn.textContent='Copied';say('Email address copied.');setTimeout(function(){btn.textContent=label;say('');},1800);}
+      function fail(){say(text);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fail);}else{fail();}
+    });
+  });
+
+  root.classList.add('js');
 })();
