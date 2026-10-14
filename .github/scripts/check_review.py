@@ -82,6 +82,8 @@ with sync_playwright() as p:
     for name,width,fn in [('review-desktop',1440,'index.html'),('review-laptop',1280,'index.html'),('review-fold',674,'index.html'),('review-tablet',820,'research.html'),('review-phone',390,'research.html'),('review-research',1440,'research.html')]:
         page.set_viewport_size({'width':width,'height':1000});page.goto(BASE+fn,wait_until='domcontentloaded');page.evaluate('document.fonts.ready')
         page.locator('.theme-control button[data-theme-value="light"]').click()
+        page.locator('img').evaluate_all("images=>images.forEach(img=>img.loading='eager')")
+        page.evaluate("Promise.race([Promise.all(Array.from(document.images).map(img=>img.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,3000))])")
         page.screenshot(path=str(OUT/(name+'.png')),full_page=True)
     browser.close()
 report['pass']=all(checks.values())

@@ -426,3 +426,7 @@ figure.fig a[data-lightbox],.gallery a[data-lightbox]{cursor:zoom-in}
 }
 .lightbox figure{max-height:100%;min-height:0}
 .lightbox figcaption{flex:0 1 auto;max-height:30dvh;overflow:auto;padding:0 2px}
+
+/* Four thesis figures use a balanced two-by-two layout. */
+#initial-contact>.media{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+@media(max-width:720px){#initial-contact>.media{grid-template-columns:minmax(0,1fr)}}
