@@ -1,0 +1,29 @@
+name: Supplied media metadata
+on:
+  push:
+    paths: ['.github/workflows/check-supplied-media.yml']
+  workflow_dispatch:
+permissions: {}
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Read public oEmbed metadata without downloading video
+        run: |
+          python3 - <<'PY'
+          import json, urllib.parse, urllib.request, concurrent.futures
+          def check(vid):
+              url='https://www.youtube.com/oembed?'+urllib.parse.urlencode({'url':'https://www.youtube.com/watch?v='+vid,'format':'json'})
+              r={'id':vid}
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0'}),timeout=15) as response:
+                      d=json.load(response)
+                  r.update({k:d.get(k) for k in ['title','author_name','author_url','provider_name','html']})
+              except Exception as e:r['error']=str(e)
+              return r
+          with concurrent.futures.ThreadPoolExecutor(max_workers=4) as ex:
+              result=list(ex.map(check,['jl-wEJFMYxY','QEO1ogYnKEI','ytGybgT78Us','mIbaOjXYxHs']))
+          print(json.dumps(result,indent=2))
+          # Metadata/embedding availability is not proof of copyright ownership.
+          PY
