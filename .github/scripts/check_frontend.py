@@ -19,7 +19,7 @@ LIVE = os.environ.get("LIVE") == "1"
 WAIT = int(os.environ.get("WAIT_SECONDS", "420"))
 OUT = Path(os.environ.get("REPORT_DIR", "browser-report"))
 PAGES = ["index.html", "research.html", "publications.html", "personal.html", "contact.html"]
-WIDTHS = [320, 390, 768, 820, 1024, 1440]
+WIDTHS = [320, 390, 540, 674, 720, 768, 820, 880, 881, 1024, 1200, 1280, 1440, 1920]
 EXPECTED = json.loads(Path("release.json").read_text())["release"]
 
 if LIVE:
@@ -62,6 +62,7 @@ with sync_playwright() as p:
         for fn in PAGES:
             response = page.goto(BASE + fn, wait_until="domcontentloaded")
             page.wait_for_selector("html.js")
+            page.evaluate("document.fonts.ready")
             for mode in ["light", "dark"]:
                 theme_button(page, mode)
                 row = page.evaluate("""() => ({

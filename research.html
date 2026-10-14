@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="site-release" content="2026-10-14.5">
+<meta name="site-release" content="2026-10-14.6">
 <title>Research — Daeho Lee</title>
 <meta name="description" content="Foot⁠–⁠ground distance sensing, exoskeleton instrumentation, and experiments from Daeho Lee’s research at KAIST’s Exo Lab.">
 <link rel="canonical" href="https://daeholee.me/research.html">
@@ -21,9 +21,17 @@
 <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101620'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='system-ui,sans-serif' font-size='34' font-weight='600' fill='%23fff'%3ED%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="assets/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<script src="theme-init.js?v=2026-10-14.5"></script>
-<link rel="stylesheet" href="styles.css?v=2026-10-14.5">
-<script src="app.js?v=2026-10-14.5" defer></script>
+<script id="theme-bootstrap">
+(function(){
+  'use strict';
+  var root=document.documentElement,pref='system';
+  try{var s=localStorage.getItem('dhl-portfolio-theme-v1');if(s==='light'||s==='dark'||s==='system')pref=s;}catch(e){}
+  root.setAttribute('data-theme-preference',pref);
+  if(pref==='system')root.removeAttribute('data-theme');else root.setAttribute('data-theme',pref);
+})();
+</script>
+<link rel="stylesheet" href="styles.css?v=2026-10-14.6">
+<script src="app.js?v=2026-10-14.6" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -53,7 +61,7 @@
     <div>
       <h1>Research</h1>
       <p class="lede">Sensor hardware, exoskeleton instrumentation, and experiments.</p>
-      <p class="intro">This work comes from my M.S. research at KAIST’s Exo Lab (2020–2023). Each project states what I did and what the study reported. Click a figure to enlarge it.</p>
+      <p class="intro">These projects originated in my graduate and post-master’s research at KAIST’s Exo Lab (2020–2023). Click a figure to enlarge it.</p>
     </div>
   </header>
 
@@ -69,49 +77,35 @@
     <header>
       <p class="index">01</p>
       <h2>Foot⁠–⁠ground distance sensing</h2>
-      <p class="summary">Small time-of-flight (ToF) sensors on the foot measure the distance to the ground throughout the gait cycle. Unlike pressure sensors, they keep reporting during swing, so a robot can see contact coming instead of only registering it.</p>
+      <p class="summary">Time-of-flight (ToF) sensors measure foot⁠–⁠ground distance during walking. The distance signal remains available during swing, complementing pressure-based measurements during stance.</p>
       <div class="chips"><a class="chip" href="publications.html#J1">J1 · JKSPE 2026</a><a class="chip" href="publications.html#T1">T1 · ISPS 2021</a><a class="chip" href="publications.html#M1">M1 · in preparation</a></div>
     </header>
     <div class="part">
       <h3>Real-time gait-phase detection</h3>
       <div class="cols">
-        <div><h4>What I did</h4><p>Designed an overshoe-type module with two ToF sensors, at the outer heel and the fifth metatarsal head, and a lightweight threshold-based algorithm that segments gait phases in real time [J1]. A 2021 presentation covered full-phase detection with multi-modal sensor-integrated shoes [T1].</p></div>
-        <div><h4>Evaluation</h4><p>Tested with one healthy participant walking on a flat indoor floor. The detected stance and swing phases matched the timing of pressure-based measurements, and the distance signal stayed informative through swing, where pressure sensors read zero.</p></div>
+        <div><h4>What I did</h4><p>Designed an overshoe-type module with two ToF sensors, near the lateral heel and the fifth metatarsophalangeal (MTP) joint, and a lightweight threshold-based algorithm that segments gait phases in real time [J1]. A 2021 presentation covered full-phase detection with multi-modal sensor-integrated shoes [T1].</p></div>
+        <div><h4>Evaluation</h4><p>Tested with one healthy participant walking on a flat indoor floor. Compared gait-phase estimates with pressure-based measurements and recorded foot⁠–⁠ground distance during swing [J1].</p></div>
       </div>
-      <p class="aside-note">Along the way I also tried continuous phase estimation on the distance signal with adaptive oscillators (PSAO), compared against heel and MTP pressure sensors. That analysis stayed exploratory and was not published.</p>
-      <div class="media">
-        <figure class="fig">
-  <a href="assets/img/gait-distance.webp" data-lightbox><img src="assets/img/gait-distance.webp" alt="Plot of measured and fitted foot⁠–⁠ground distance in millimetres against percent of gait cycle" loading="lazy" width="490" height="405"></a>
-  <figcaption>Foot⁠–⁠ground distance over one gait cycle, measured and fitted (exploratory analysis).</figcaption>
-</figure>
-        <figure class="fig">
-  <a href="assets/img/gait-phases.webp" data-lightbox><img src="assets/img/gait-phases.webp" alt="Plots comparing the phase estimated from the distance signal with foot-pressure sensors at the heel and MTP over ten seconds of walking" loading="lazy" width="473" height="530"></a>
-  <figcaption>Continuous phase from the distance signal (PSAO) against heel and MTP pressure sensors (exploratory analysis).</figcaption>
-</figure>
-      </div>
+
     </div>
     <div class="part" id="initial-contact">
       <h3>Preparing an exoskeleton for ground contact</h3>
       <div class="cols">
         <div><h4>What I did</h4><p>Designed and built a foot⁠–⁠ground distance module (custom PCB, four ToF sensors, STM32 microcontroller) and integrated it into the Angel Legs&nbsp;M20 exoskeleton. On top of it I implemented a layer that uses the distance signal to retune the joint’s virtual spring and damper before the foot lands, and ran walking experiments over tandem force plates with the layer off and at two settings. This was my M.S. thesis, <em>Terminal Decision Maker Against Upcoming Surface for the Safe Locomotion of Wearable Robots</em>.</p></div>
-        <div><h4>Status</h4><p>A manuscript, <em>FDL: Foot⁠–⁠Ground Distance Layer for Initial-Contact Load Modulation in a Lower-Limb Exoskeleton</em>, is in preparation [M1]. It reanalyses the thesis data; it makes no clinical or stability claims.</p></div>
+        <div><h4>Status</h4><p>A manuscript, <em>FDL: Foot⁠–⁠Ground Distance Layer for Initial-Contact Load Modulation in a Lower-Limb Exoskeleton</em>, is in preparation [M1]. It builds on the thesis experiments.</p></div>
       </div>
       <div class="media">
         <figure class="fig">
   <a href="assets/img/tof-module.webp" data-lightbox><img src="assets/img/tof-module.webp" alt="Block diagram of the sensor module: four VL53L1X time-of-flight sensors on an I2C bus, an STM32G474 microcontroller, and SPI and analog outputs to the robot" loading="lazy" width="1200" height="541"></a>
   <figcaption>Module architecture: four VL53L1X ToF sensors over I²C, an STM32G474 microcontroller, SPI and analog outputs to the robot.</figcaption>
 </figure>
-        <figure class="fig cover">
+        <figure class="fig">
   <a href="assets/img/m20-module.webp" data-lightbox><img src="assets/img/m20-module.webp" alt="Three photographs of the distance module mounted on the foot of the Angel Legs M20 exoskeleton during walking trials" loading="lazy" width="1200" height="708"></a>
   <figcaption>The module on the foot of the Angel Legs&nbsp;M20 during walking trials.</figcaption>
 </figure>
         <figure class="fig">
-  <a href="assets/img/concept-assistance.webp" data-lightbox><img src="assets/img/concept-assistance.webp" alt="Schematic of a walking model and the joint-level assistance concept around ground contact in stance and swing" loading="lazy" width="1153" height="1131"></a>
-  <figcaption>Walking model (a) and the joint-level response around ground contact in stance (b) and swing (c), from the thesis.</figcaption>
-</figure>
-        <figure class="fig">
-  <a href="assets/img/grf-results.webp" data-lightbox><img src="assets/img/grf-results.webp" alt="Plot of vertical ground-reaction force in newtons over normalized time for three conditions" loading="lazy" width="1200" height="626"></a>
-  <figcaption>Vertical ground-reaction force at initial contact with the foot⁠–⁠ground distance layer off, weak, and strong (thesis experiments).</figcaption>
+  <a href="assets/img/concept-assistance.webp" data-lightbox><img src="assets/img/concept-assistance.webp" alt="Thesis diagram showing a walking model, joint flexion and extension, and stance and swing configurations" loading="lazy" width="1153" height="1131"></a>
+  <figcaption>Thesis concept diagram: (a) walking model; (b) joint flexion and extension; (c) stance and swing configurations.</figcaption>
 </figure>
       </div>
     </div>
@@ -125,7 +119,7 @@
       <div class="chips"><a class="chip" href="publications.html#J2">J2 · IJCAS 2023</a><a class="chip" href="publications.html#C1">C1 · ICRA 2021</a><a class="chip" href="publications.html#J5">J5 · ICROS 2020</a></div>
     </header>
     <div class="cols">
-      <div><h4>What I did</h4><p>Developed an FSR-based crutch-force module [J5] and pneumatic plantar-pressure modules, built and instrumented a modified WalkON Suit&nbsp;4, and ran the shock-absorption experiments [C1, J2].</p></div>
+      <div><h4>What I did</h4><p>Developed an FSR-based crutch-force module [J5] and pneumatic plantar-pressure modules, fabricated components and instrumented a modified WalkON Suit&nbsp;4, and ran the shock-absorption experiments [C1, J2].</p></div>
       <div><h4>Reported result</h4><p>In the journal study, the shock absorber with the designed gait pattern reduced the mean peak heel ground-reaction force by <strong>23%</strong> compared with no absorber, in one participant [J2]. The journal article extends the ICRA 2021 study [C1].</p></div>
     </div>
     <div class="media single">
@@ -149,14 +143,14 @@
     </div>
     <div class="media three wide">
       <figure>
-  <div class="yt" data-id="mIbaOjXYxHs" data-title="CYBATHLON 2020 Powered Exoskeleton Race">
+  <div class="yt" data-id="mIbaOjXYxHs" data-title="CYBATHLON 2020 Global Edition - EXO Finals">
     <a href="https://www.youtube.com/watch?v=mIbaOjXYxHs" target="_blank" rel="noopener">
       <img src="https://i.ytimg.com/vi/mIbaOjXYxHs/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">
       <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
-      <span class="sr-only">Play: CYBATHLON 2020 Powered Exoskeleton Race</span>
+      <span class="sr-only">Play: CYBATHLON 2020 Global Edition - EXO Finals</span>
     </a>
   </div>
-  <figcaption class="yt-caption"><strong>CYBATHLON 2020</strong> · Powered Exoskeleton Race broadcast</figcaption>
+  <figcaption class="yt-caption"><strong>CYBATHLON 2020 Global Edition - EXO Finals</strong></figcaption>
 </figure>
       <figure class="fig cover">
   <a href="assets/img/cybathlon-pit.webp" data-lightbox><img src="assets/img/cybathlon-pit.webp" alt="Team members kneeling around the exoskeleton on the floor of the competition hall" loading="lazy" width="1200" height="803"></a>
@@ -173,7 +167,7 @@
     <header>
       <p class="index">04</p>
       <h2>Experimental systems for wearable-robot evaluation</h2>
-      <p class="summary">An integrated measurement and analysis setup used across the projects above.</p>
+      <p class="summary">Measurement-system integration and analysis software for wearable-robot evaluation.</p>
     </header>
     <div class="cols">
       <div><h4>Instrumentation</h4><p>Integrated VICON motion capture, an AMTI instrumented treadmill, Delsys EMG, Xsens inertial sensors, and custom sensors into one evaluation setup.</p></div>
