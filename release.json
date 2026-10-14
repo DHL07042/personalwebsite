@@ -1,5 +1,5 @@
 {
-  "release": "2026-10-14.7",
+  "release": "2026-10-14.8",
   "site": "Daeho Lee",
   "domain": "daeholee.me",
   "pages": [
@@ -18,5 +18,5 @@
     "photographs-and-figures",
     "responsive-type"
   ],
-  "base_content_commit": "860b6082feaec1a84e198f4005a42e9275bb8d31"
+  "base_content_commit": "e2839303868d84a6f81761dbad655d17c0286262"
 }

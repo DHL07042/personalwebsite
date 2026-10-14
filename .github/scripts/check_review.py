@@ -39,6 +39,14 @@ research=Path('research.html').read_text()
 # restored in release 2026-10-14.7 with the owner's condition mapping (Case I/II/III = pre-tuning off/weak/strong).
 checks['held_figures_not_rendered']=all(n not in research for n in ['gait-distance.webp','gait-phases.webp'])
 checks['held_assets_preserved']=all(Path('assets/img',n).is_file() for n in ['gait-distance.webp','gait-phases.webp','grf-results.webp'])
+# Display asset provenance and source-based scope checks.
+import hashlib
+media=json.loads(Path('media-processing.json').read_text())
+checks['media_manifest_integrity']=all(hashlib.sha256(Path(x['source']).read_bytes()).hexdigest()==x['source_sha256'] and hashlib.sha256(Path(x['output']).read_bytes()).hexdigest()==x['output_sha256'] and x['decoded_pixel_equality'] for x in media['assets'])
+checks['t1_byline_matches_supplied_sources']='<strong>D. Lee</strong>, K. Kong, and H. Choi' in Path('publications.html').read_text().split('id="T1"')[1]
+checks['t1_scope_is_not_fully_crossed']='for one participant, plus examples from two additional participants' in research
+checks['grf_owner_mapping_retained']='off (Case I), weak (Case II) and strong (Case III)' in research
+checks['t1_provenance_retained']=research.count('[T1]')>=6
 report={'base':BASE,'checks':checks,'broken_links':broken,'text_zoom':[],'limits':['Chromium viewport tests; not physical devices.','No guarantee of Internet tail latency or full video playback.']}
 with sync_playwright() as p:
     browser=p.chromium.launch()

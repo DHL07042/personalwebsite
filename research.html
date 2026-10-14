@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="site-release" content="2026-10-14.7">
+<meta name="site-release" content="2026-10-14.8">
 <title>Research — Daeho Lee</title>
 <meta name="description" content="Foot⁠–⁠ground distance sensing, exoskeleton instrumentation, and experiments from Daeho Lee’s research at KAIST’s Exo Lab.">
 <link rel="canonical" href="https://daeholee.me/research.html">
@@ -30,8 +30,8 @@
   if(pref==='system')root.removeAttribute('data-theme');else root.setAttribute('data-theme',pref);
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=2026-10-14.7">
-<script src="app.js?v=2026-10-14.7" defer></script>
+<link rel="stylesheet" href="styles.css?v=2026-10-14.8">
+<script src="app.js?v=2026-10-14.8" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -83,21 +83,22 @@
     <div class="part">
       <h3>Real‑time gait‑phase detection</h3>
       <div class="cols">
-        <div><h4>What I did</h4><p>Designed a shoe‑mounted module with two ToF sensors, near the lateral heel and the fifth metatarsophalangeal (MTP) joint, and a threshold‑based algorithm that segments gait phases in real time. The approach was first presented at ASME ISPS 2021 [T1]; the journal article [J1] reports the overshoe‑type module and its evaluation.</p></div>
-        <div><h4>Evaluation</h4><p>The 2021 presentation showed phase detection for three participants at walking speeds from 1.0 to 4.1 km/h with identical thresholds [T1]. The journal study tested one healthy participant on a flat indoor floor, compared the gait‑phase estimates with pressure‑based measurements, and recorded foot⁠–⁠ground distance through swing [J1].</p></div>
+        <div><h4>What I did</h4><p>Designed a shoe‑mounted module with two ToF sensors, near the lateral heel and the fifth metatarsophalangeal (MTP) joint, and a threshold‑based algorithm that segments gait phases in real time. This work was presented at ASME ISPS 2021 [T1] and subsequently reported in JKSPE [J1].</p></div>
+        <div><h4>Evaluation</h4><p>The 2021 presentation includes recordings at 1.0, 2.1, and 4.1 km/h and during gradual deceleration for one participant, plus examples from two additional participants using the same thresholds [T1]. The journal study tested one healthy participant on a flat indoor floor, compared the gait‑phase estimates with pressure‑based measurements, and recorded foot⁠–⁠ground distance through swing [J1].</p></div>
       </div>
-      <div class="media three">
-<figure class="fig cover">
-  <a href="assets/img/t1-shoe.webp" data-lightbox><img src="assets/img/t1-shoe.webp" alt="Sensor-integrated shoe prototype: a sole plate strapped to a sneaker with two ToF sensors, a microcontroller board and a cable to a controller box" loading="lazy" width="582" height="485"></a>
+      <p class="method-note"><strong>Measurement principle.</strong> With a fixed separation between the sensors, the two distances describe the foot’s position relative to the ground; their relative values help distinguish swing sub‑phases [T1].</p>
+      <div class="media study-figures" aria-label="Figures from the ISPS 2021 presentation">
+<figure class="fig">
+  <a href="assets/img/t1-shoe-display.webp" data-lightbox><img src="assets/img/t1-shoe-display.webp" alt="Sensor-integrated shoe prototype: a sole plate strapped to a sneaker with two ToF sensors, a microcontroller board and a cable to a controller box" loading="lazy" width="579" height="482"></a>
   <figcaption>Shoe-mounted prototype from the 2021 study: two ToF sensors under the heel and the MTP joint on a strapped sole plate [T1].</figcaption>
 </figure>
 <figure class="fig">
-  <a href="assets/img/t1-threshold.webp" data-lightbox><img src="assets/img/t1-threshold.webp" alt="Plot of heel and MTP distance in millimetres against percent of gait phase, mean with one standard deviation band, and the two threshold lines" loading="lazy" width="899" height="556"></a>
-  <figcaption>Heel and MTP distance over the gait cycle (mean ± 1 s.d.) with the two thresholds used for phase detection [T1].</figcaption>
+  <a href="assets/img/t1-threshold-display.webp" data-lightbox><img src="assets/img/t1-threshold-display.webp" alt="Plot of heel and MTP distance in millimetres against percent of gait phase, mean with one standard deviation band, and the two threshold lines" loading="lazy" width="899" height="556"></a>
+  <figcaption>Left heel and MTP distances over the gait cycle (mean ± 1 s.d.), with the two detection thresholds [T1].</figcaption>
 </figure>
-<figure class="fig">
-  <a href="assets/img/t1-phases.webp" data-lightbox><img src="assets/img/t1-phases.webp" alt="Two stacked plots: ToF measurements from the heel and MTP sensors over time, and the detected gait phase 0 to 5 over the same time, walking at 1.0 km/h" loading="lazy" width="1200" height="1025"></a>
-  <figcaption>ToF measurements and the detected gait phase (0–5) while walking at 1.0 km/h [T1].</figcaption>
+<figure class="fig figure-wide">
+  <a href="assets/img/t1-phases-display.webp" data-lightbox><img src="assets/img/t1-phases-display.webp" alt="Two stacked plots: ToF measurements from the heel and MTP sensors over time, and the detected gait phase 0 to 5 over the same time, walking at 1.0 km/h" loading="lazy" width="1200" height="1025"></a>
+  <figcaption>Representative right-foot recording from participant 1 at 1.0 km/h: measured distances and detected phases 0–5 [T1].</figcaption>
 </figure>
       </div>
 
@@ -118,11 +119,11 @@
   <figcaption>The module on the foot of the Angel Legs&nbsp;M20 during walking trials.</figcaption>
 </figure>
         <figure class="fig">
-  <a href="assets/img/concept-assistance.webp" data-lightbox><img src="assets/img/concept-assistance.webp" alt="Thesis diagram showing a walking model, joint flexion and extension, and stance and swing configurations" loading="lazy" width="1153" height="1131"></a>
+  <a href="assets/img/concept-assistance-display.webp" data-lightbox><img src="assets/img/concept-assistance-display.webp" alt="Thesis diagram showing a walking model, joint flexion and extension, and stance and swing configurations" loading="lazy" width="1141" height="1125"></a>
   <figcaption>Thesis concept diagram: (a) walking model; (b) joint flexion and extension; (c) stance and swing configurations.</figcaption>
 </figure>
 <figure class="fig">
-  <a href="assets/img/grf-results.webp" data-lightbox><img src="assets/img/grf-results.webp" alt="Plot of vertical ground-reaction force in newtons over normalized time for three conditions labelled Case I, II and III" loading="lazy" width="1200" height="626"></a>
+  <a href="assets/img/grf-results-display.webp" data-lightbox><img src="assets/img/grf-results-display.webp" alt="Plot of vertical ground-reaction force in newtons over normalized time for three conditions labelled Case I, II and III" loading="lazy" width="1249" height="646"></a>
   <figcaption>Vertical ground‑reaction force through one stance phase (time‑normalized) for the three thesis conditions: virtual‑spring pre‑tuning off (Case I), weak (Case II) and strong (Case III). The manuscript in preparation calls these FDL off, weak and strong.</figcaption>
 </figure>
       </div>
