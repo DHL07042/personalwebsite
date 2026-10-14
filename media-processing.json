@@ -1,72 +1,6 @@
 {
-  "release": "2026-10-14.8",
+  "release": "2026-10-15.1",
   "assets": [
-    {
-      "source": "assets/img/t1-shoe.webp",
-      "output": "assets/img/t1-shoe-display.webp",
-      "source_sha256": "44e24f7a309ac6a7adedbba9a970df4794d5fdbf9faca9d3673a875e8b91bd2c",
-      "output_sha256": "fe53a17bdd77b75b056e37f3e2b9b594cdb7caec43e377f7220fe4f30b94b37d",
-      "source_dimensions": [
-        582,
-        485
-      ],
-      "source_box": [
-        3,
-        0,
-        582,
-        482
-      ],
-      "output_dimensions": [
-        579,
-        482
-      ],
-      "operation": "Trim exactly-white external border only; retain source margin; lossless WebP; no resampling, recoloring, retouching or changed labels.",
-      "decoded_pixel_equality": true
-    },
-    {
-      "source": "assets/img/t1-threshold.webp",
-      "output": "assets/img/t1-threshold-display.webp",
-      "source_sha256": "bc1541a4042f16daa6108ee9041f6cd419529cc9b9ffe4b05fd45b52f726a617",
-      "output_sha256": "dd5412ede22e101eac5115cb0d7966115a9885e2875e8adedeadc3da04553b8e",
-      "source_dimensions": [
-        899,
-        556
-      ],
-      "source_box": [
-        0,
-        0,
-        899,
-        556
-      ],
-      "output_dimensions": [
-        899,
-        556
-      ],
-      "operation": "Trim exactly-white external border only; retain source margin; lossless WebP; no resampling, recoloring, retouching or changed labels.",
-      "decoded_pixel_equality": true
-    },
-    {
-      "source": "assets/img/t1-phases.webp",
-      "output": "assets/img/t1-phases-display.webp",
-      "source_sha256": "6b5cb9d993f0fb4e91a4dda7b9ec70851460d80a0122233403da93e3e0ef432c",
-      "output_sha256": "71bcd1e864506a569e2f799833614e84e05affd3229b76b3871c01c6b5d0659e",
-      "source_dimensions": [
-        1200,
-        1025
-      ],
-      "source_box": [
-        0,
-        0,
-        1200,
-        1025
-      ],
-      "output_dimensions": [
-        1200,
-        1025
-      ],
-      "operation": "Trim exactly-white external border only; retain source margin; lossless WebP; no resampling, recoloring, retouching or changed labels.",
-      "decoded_pixel_equality": true
-    },
     {
       "source": "assets/src/experiment-results.png",
       "output": "assets/img/grf-results-display.webp",
@@ -111,5 +45,6 @@
       "operation": "Trim exactly-white external border only; retain source margin; lossless WebP; no resampling, recoloring, retouching or changed labels.",
       "decoded_pixel_equality": true
     }
-  ]
+  ],
+  "note": "ISPS 2021 deck figures (t1-*) were removed in 2026-10-15.1; Research 01 uses the published J1 figures (assets/src/j1, CC BY-NC 3.0). Remaining entries are unchanged."
 }

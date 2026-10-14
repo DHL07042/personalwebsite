@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="site-release" content="2026-10-14.8">
+<meta name="site-release" content="2026-10-15.1">
 <title>Research — Daeho Lee</title>
 <meta name="description" content="Foot⁠–⁠ground distance sensing, exoskeleton instrumentation, and experiments from Daeho Lee’s research at KAIST’s Exo Lab.">
 <link rel="canonical" href="https://daeholee.me/research.html">
@@ -30,8 +30,8 @@
   if(pref==='system')root.removeAttribute('data-theme');else root.setAttribute('data-theme',pref);
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=2026-10-14.8">
-<script src="app.js?v=2026-10-14.8" defer></script>
+<link rel="stylesheet" href="styles.css?v=2026-10-15.1">
+<script src="app.js?v=2026-10-15.1" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -83,24 +83,25 @@
     <div class="part">
       <h3>Real‑time gait‑phase detection</h3>
       <div class="cols">
-        <div><h4>What I did</h4><p>Designed a shoe‑mounted module with two ToF sensors, near the lateral heel and the fifth metatarsophalangeal (MTP) joint, and a threshold‑based algorithm that segments gait phases in real time. This work was presented at ASME ISPS 2021 [T1] and subsequently reported in JKSPE [J1].</p></div>
-        <div><h4>Evaluation</h4><p>The 2021 presentation includes recordings at 1.0, 2.1, and 4.1 km/h and during gradual deceleration for one participant, plus examples from two additional participants using the same thresholds [T1]. The journal study tested one healthy participant on a flat indoor floor, compared the gait‑phase estimates with pressure‑based measurements, and recorded foot⁠–⁠ground distance through swing [J1].</p></div>
+        <div><h4>What I did</h4><p>Designed a shoe‑mounted module with two ToF sensors, near the lateral heel and the fifth metatarsophalangeal (MTP) joint, and a threshold‑based algorithm that segments the gait cycle into six phases in real time. This work was presented at ASME ISPS 2021 [T1] and subsequently reported in JKSPE [J1].</p></div>
+        <div><h4>Evaluation</h4><p>One healthy participant walked on a flat indoor floor, with about 20 full gait cycles per trial set [J1]. Against an air‑bladder pressure reference, the distance‑based method starts stance just before physical contact, so it reports a shorter swing phase (by 3.6 and 5.9 percentage points for the left and right foot); in exchange, it keeps measuring through swing [J1].</p></div>
       </div>
-      <p class="method-note"><strong>Measurement principle.</strong> With a fixed separation between the sensors, the two distances describe the foot’s position relative to the ground; their relative values help distinguish swing sub‑phases [T1].</p>
-      <div class="media study-figures" aria-label="Figures from the ISPS 2021 presentation">
+      <p class="method-note"><strong>Design choices.</strong> The heel leaves and reaches the ground before the MTP in every step, and the two distances cross when the sole is parallel to the ground; the six phases are defined from these events. The VL53L1X sensor is not accurate below 40&nbsp;mm, so near the ground its reading is used only as a contact flag, with thresholds under 10&nbsp;mm. To keep the decision real‑time, the algorithm compares each reading with the previous one instead of differentiating the distance signal, which would amplify noise and require a phase‑lagging filter [J1].</p>
+      <div class="media study-figures" aria-label="Figures from the journal article J1">
 <figure class="fig">
-  <a href="assets/img/t1-shoe-display.webp" data-lightbox><img src="assets/img/t1-shoe-display.webp" alt="Sensor-integrated shoe prototype: a sole plate strapped to a sneaker with two ToF sensors, a microcontroller board and a cable to a controller box" loading="lazy" width="579" height="482"></a>
-  <figcaption>Shoe-mounted prototype from the 2021 study: two ToF sensors under the heel and the MTP joint on a strapped sole plate [T1].</figcaption>
+  <a href="assets/img/j1-fig2-module.webp" data-lightbox><img src="assets/img/j1-fig2-module.webp" alt="Two photographs: the sensor module strapped under a sneaker with two ToF sensors, a Teensy 3.2 board and a myRIO controller; and the bottom view with silicone-tube air bladders at the heel and MTP" loading="lazy" width="1400" height="671"></a>
+  <figcaption>(a) Shoe‑mounted module with two ToF sensors, a Teensy&nbsp;3.2 board and a myRIO controller; (b) bottom view with the silicone‑tube air bladders used as the pressure reference [J1, Fig. 2].</figcaption>
 </figure>
 <figure class="fig">
-  <a href="assets/img/t1-threshold-display.webp" data-lightbox><img src="assets/img/t1-threshold-display.webp" alt="Plot of heel and MTP distance in millimetres against percent of gait phase, mean with one standard deviation band, and the two threshold lines" loading="lazy" width="899" height="556"></a>
-  <figcaption>Left heel and MTP distances over the gait cycle (mean ± 1 s.d.), with the two detection thresholds [T1].</figcaption>
+  <a href="assets/img/j1-fig8-flowchart.webp" data-lightbox><img src="assets/img/j1-fig8-flowchart.webp" alt="Flowchart: contact flags from the heel and MTP thresholds select phases 0 to 2; in swing, comparisons of heel and MTP distances and of successive heel readings select phases 3 to 5" loading="lazy" width="1200" height="768"></a>
+  <figcaption>Decision logic: contact flags separate the stance phases 0–2; in swing, the heel–MTP relation and the change in heel distance separate phases 3–5 [J1, Fig. 8].</figcaption>
 </figure>
 <figure class="fig figure-wide">
-  <a href="assets/img/t1-phases-display.webp" data-lightbox><img src="assets/img/t1-phases-display.webp" alt="Two stacked plots: ToF measurements from the heel and MTP sensors over time, and the detected gait phase 0 to 5 over the same time, walking at 1.0 km/h" loading="lazy" width="1200" height="1025"></a>
-  <figcaption>Representative right-foot recording from participant 1 at 1.0 km/h: measured distances and detected phases 0–5 [T1].</figcaption>
+  <a href="assets/img/j1-fig10-walking.webp" data-lightbox><img src="assets/img/j1-fig10-walking.webp" alt="Two stacked plots over nine seconds of walking: heel and MTP distances for both feet, and the detected gait phase for each foot" loading="lazy" width="1800" height="652"></a>
+  <figcaption>Distances (top) and detected phases (bottom) for both feet during continuous walking [J1, Fig. 10].</figcaption>
 </figure>
       </div>
+      <p class="fig-credit">Figures reproduced from [J1], © Korean Society for Precision Engineering, under CC BY‑NC 3.0.</p>
 
     </div>
     <div class="part" id="initial-contact">
