@@ -1,0 +1,48 @@
+name: Inspect photography source transfer
+on:
+  push:
+    branches: ['gpt/photo-framing-261018']
+    paths: ['.github/workflows/photo-source-inspect.yml']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Inspect public gallery source
+        run: |
+          python3 - <<'PY'
+          import urllib.request,urllib.parse,json,re
+          from pathlib import Path
+          from html.parser import HTMLParser
+          class P(HTMLParser):
+            def __init__(self):super().__init__();self.links=[];self.images=[]
+            def handle_starttag(self,t,aa):
+              a=dict(aa)
+              if t=='a' and a.get('href'):self.links.append(a['href'])
+              if t=='img':self.images.append(a)
+          base='https://sites.google.com/view/robotengdhl'
+          out=Path('source-inspection');out.mkdir()
+          seen=[];queue=[base];rows=[]
+          while queue and len(seen)<8:
+            u=queue.pop(0)
+            if u in seen:continue
+            seen.append(u)
+            try:
+              with urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':'Mozilla/5.0'}),timeout=15) as r:
+                s=r.read().decode('utf-8');final=r.geturl()
+              p=P();p.feed(s)
+              (out/f'page-{len(seen)}.html').write_text(s)
+              rows.append({'url':u,'final':final,'length':len(s),'links':p.links,'images':p.images,'googleusercontent_count':s.count('googleusercontent'),'title':re.findall(r'<title>(.*?)</title>',s)})
+              for link in p.links:
+                link=urllib.parse.urljoin(base+'/',link)
+                if link.startswith(base) and '#' not in link and link not in seen:queue.append(link)
+            except Exception as e:rows.append({'url':u,'error':str(e)})
+          (out/'index.json').write_text(json.dumps(rows,indent=2));print(json.dumps([{k:v for k,v in r.items() if k!='images'} for r in rows],indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: photo-source-inspection
+          path: source-inspection/
+          retention-days: 1
