@@ -91,3 +91,7 @@ report['pass']=all(checks.values())
 (OUT/'review.json').write_text(json.dumps(report,indent=2))
 print(json.dumps(report,indent=2))
 if not report['pass']:raise SystemExit('Focused review checks failed.')
+
+# Editorial regressions are additive; existing checks remain unchanged.
+import runpy
+runpy.run_path(str(Path(__file__).with_name("check_copy_ri.py")), run_name="__main__")

@@ -1,4 +1,4 @@
-/* daeholee.me — site styles. Release 2026-10-14.8 */
+/* daeholee.me — site styles. Release 2026-10-17.3 */
 
 @font-face{font-family:"Geist";src:url("assets/fonts/Geist-Variable.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Geist Mono";src:url("assets/fonts/GeistMono-Variable.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
@@ -436,3 +436,16 @@ figure.fig a[data-lightbox],.gallery a[data-lightbox]{cursor:zoom-in}
 .fig-credit{margin-top:.6rem;font-size:var(--small);color:var(--muted)}
 .timeline li{grid-template-columns:84px minmax(0,1fr)}
 @media (max-width:720px){.timeline li{grid-template-columns:70px minmax(0,1fr)}}
+
+/* Three research-interest rows; ordinary wrapping preserves readable type. */
+.research-interests{margin-top:clamp(28px,4vw,44px);padding-top:22px;border-top:1px solid var(--line)}
+.research-interests h2{font-size:1.2rem;line-height:1.35;letter-spacing:-.01em}
+.research-interests .ri-scope{margin-top:.35rem;color:var(--muted);font-size:var(--label);font-style:italic}
+.research-interests dl{margin-top:.85rem}
+.research-interests .ri-row{line-height:1.6;overflow-wrap:break-word;text-wrap:pretty}
+.research-interests .ri-row+.ri-row{margin-top:.55rem}
+.research-interests dt,.research-interests dd{display:inline;margin:0;font-size:var(--body)}
+.research-interests dt{font-weight:600;color:var(--ink)}
+.research-interests dd{font-weight:400;color:var(--ink-2)}
+.research-interests dd::before{content:" — ";font-weight:400}
+.page-head+.research-interests{margin-top:24px;padding-top:0;border-top:0}
