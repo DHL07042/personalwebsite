@@ -75,3 +75,13 @@ PR descriptions, comments, committed files and CI logs are public in this reposi
 - Keep prior research cards, project order, figures, attribution and manuscript status intact. Interest in intent inference is not evidence of having solved intent/response separation.
 - Journal numbering is deliberately unchanged here. The owner selected oldest-first cumulative journal numbers while retaining newest-first display; migrate them with CV v0.992 and public-cv.json in a later reviewed change. Do not relabel publication anchors silently while the public CV still uses the old labels.
 - User-only editorial handoffs do not belong in this repository. Closing a PR or pruning a branch is not a substitute for correct records or any applicable authorship disclosures.
+
+
+## Photography framing — pending source restoration (2026-10-18.1)
+- User correction supersedes any older rule to crop personal photography to square tiles. A photograph's frame and aspect ratio are part of its content.
+- Preserve the complete source composition in BOTH gallery preview and enlarged view. No square conversion, cover crop, hover zoom crop, or clipped corners. Arrange the layout around the images, not the reverse.
+- Image processing may reduce resolution or remove private metadata only after retaining an unmodified source locally; it must not trim, stretch, outpaint, retouch, or add unseen content without explicit approval.
+- Full-view links must point to uncropped source-framing renditions, not cropped thumbnails. Keep loading local and lazy; do not use external image requests to replace user photographs.
+- BLOCKER: travel-1.webp through travel-6.webp are already square-cropped files. Five are 800x800, travel-5 is 513x513. The code repair does NOT restore their missing edges. Obtain the six uncropped originals before marking this change ready or merged. Keep the existing files unchanged meanwhile.
+- Browser tests distinguish correct layout from source fidelity. The additional shape fixtures test portrait/landscape/panorama fitting; they are not replacement photographs. A passing test is not confirmation that the six source images have been restored.
+- Photography repair must not change the approved Performance driving paragraph, RI rows, CV, publication numbers, research images, or DNS.

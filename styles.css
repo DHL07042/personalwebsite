@@ -1,4 +1,4 @@
-/* daeholee.me — site styles. Release 2026-10-17.3 */
+/* daeholee.me — site styles. Release 2026-10-18.1 */
 
 @font-face{font-family:"Geist";src:url("assets/fonts/Geist-Variable.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Geist Mono";src:url("assets/fonts/GeistMono-Variable.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
@@ -449,3 +449,12 @@ figure.fig a[data-lightbox],.gallery a[data-lightbox]{cursor:zoom-in}
 .research-interests dd{font-weight:400;color:var(--ink-2)}
 .research-interests dd::before{content:" — ";font-weight:400}
 .page-head+.research-interests{margin-top:24px;padding-top:0;border-top:0}
+
+/* Photography is authored composition, not decorative card imagery.
+   These rules preserve the supplied image bounds. They cannot recover
+   content removed from an image file before it reached this repository. */
+.photography-gallery{align-items:start}
+.photography-gallery a{align-self:start;border:0;border-radius:0;overflow:visible;background:transparent}
+.photography-gallery img{display:block;width:100%;height:auto;aspect-ratio:auto;object-fit:contain;border-radius:0;transform:none;transition:none}
+.photography-gallery a:hover img{transform:none}
+.lightbox.photography-view img{flex:0 0 auto;width:auto;height:auto;max-width:100%;max-height:calc(100dvh - 128px);object-fit:contain;border-radius:0;background:transparent}
