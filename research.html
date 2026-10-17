@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="site-release" content="2026-10-15.2">
+<meta name="site-release" content="2026-10-17.1">
 <title>Research — Daeho Lee</title>
 <meta name="description" content="Foot⁠–⁠ground distance sensing, exoskeleton instrumentation, and experiments from Daeho Lee’s research at KAIST’s Exo Lab.">
 <link rel="canonical" href="https://daeholee.me/research.html">
@@ -30,8 +30,8 @@
   if(pref==='system')root.removeAttribute('data-theme');else root.setAttribute('data-theme',pref);
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=2026-10-15.2">
-<script src="app.js?v=2026-10-15.2" defer></script>
+<link rel="stylesheet" href="styles.css?v=2026-10-17.1">
+<script src="app.js?v=2026-10-17.1" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -107,7 +107,7 @@
     <div class="part" id="initial-contact">
       <h3>Preparing an exoskeleton for ground contact</h3>
       <div class="cols">
-        <div><h4>What I did</h4><p>Designed and built a foot⁠–⁠ground distance module (custom PCB, four ToF sensors, STM32 microcontroller) and integrated it into the Angel Legs&nbsp;M20 exoskeleton. On top of it I implemented a layer that uses the distance signal to retune the joint’s virtual spring and damper before the foot lands, and ran walking experiments over tandem force plates with the layer off and at two settings. This was my M.S. thesis, <em>Terminal Decision Maker Against Upcoming Surface for the Safe Locomotion of Wearable Robots</em>.</p></div>
+        <div><h4>What I did</h4><p>Designed the circuit and wrote the software for a foot⁠–⁠ground distance module (four ToF sensors, STM32 microcontroller). A labmate laid out the PCB from that circuit; I assembled and tested the boards and integrated the module into the Angel Legs&nbsp;M20 exoskeleton. On top of it I implemented a layer that uses the distance signal to retune the joint’s virtual spring and damper before the foot lands, and ran walking experiments over tandem force plates with the layer off and at two settings. This was my M.S. thesis, <em>Terminal Decision Maker Against Upcoming Surface for the Safe Locomotion of Wearable Robots</em>.</p></div>
         <div><h4>Status</h4><p>A manuscript, <em>FDL: Foot⁠–⁠Ground Distance Layer for Initial‑Contact Load Modulation in a Lower‑Limb Exoskeleton</em>, is in preparation [M1]. It builds on the thesis experiments.</p></div>
       </div>
       <div class="media">
@@ -139,8 +139,8 @@
       <div class="chips"><a class="chip" href="publications.html#J2">J2 · IJCAS 2023</a><a class="chip" href="publications.html#C1">C1 · ICRA 2021</a><a class="chip" href="publications.html#J5">J5 · ICROS 2020</a></div>
     </header>
     <div class="cols">
-      <div><h4>What I did</h4><p>Developed an FSR-based crutch‑force module [J5] and pneumatic plantar‑pressure modules, fabricated components and instrumented a modified WalkON Suit&nbsp;4, and ran the shock‑absorption experiments [C1, J2].</p></div>
-      <div><h4>Reported result</h4><p>In the journal study, the shock absorber with the designed gait pattern reduced the mean peak heel ground‑reaction force by <strong>23%</strong> compared with no absorber, in one participant [J2]. The journal article extends the ICRA 2021 study [C1].</p></div>
+      <div><h4>What I did</h4><p>Developed an FSR-based crutch‑force module, including the choice of sensor placement [J5], and pneumatic plantar‑pressure modules; fabricated components and instrumented a modified WalkON Suit&nbsp;4, and ran the shock‑absorption experiments [C1, J2].</p></div>
+      <div><h4>Reported result</h4><p>In the journal study, the shock absorber with the designed gait pattern reduced the mean peak heel ground‑reaction force by <strong>23%</strong> compared with no absorber, in one participant [J2]. Forces measured on one crutch were also lower (root‑mean‑square: 11% vertical, 26% horizontal), so the lower heel load was not explained by heavier crutch use [J2]. The journal article extends the ICRA 2021 study [C1].</p></div>
     </div>
     <div class="media single">
       <figure class="fig">
@@ -158,7 +158,7 @@
       <div class="chips"><a class="chip" href="publications.html#J3">J3 · IEEE IEM 2022</a></div>
     </header>
     <div class="cols">
-      <div><h4>What I did</h4><p>Assembled and debugged the team’s exoskeletons through the competition schedule, modified the foot module to fit a wider range of users, and integrated the pressure-sensing foot hardware used for human‑intention detection.</p></div>
+      <div><h4>What I did</h4><p>Assembled and debugged the team’s exoskeletons through the competition schedule, including the pressure‑sensing foot modules used for human‑intention detection, and modified the foot module to fit a wider range of users.</p></div>
       <div><h4>Team outcome</h4><p>Gold and bronze medals in the Powered Exoskeleton Race. Three graduate students on the team, including me, received the KAIST Global Leadership Award. The overview article [J3] describes the WalkON Suit system.</p></div>
     </div>
     <div class="media three wide">
