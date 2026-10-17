@@ -95,3 +95,5 @@ if not report['pass']:raise SystemExit('Focused review checks failed.')
 # Editorial regressions are additive; existing checks remain unchanged.
 import runpy
 runpy.run_path(str(Path(__file__).with_name("check_copy_ri.py")), run_name="__main__")
+
+runpy.run_path(str(Path(__file__).with_name("check_photo_framing.py")), run_name="__main__")

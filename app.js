@@ -83,7 +83,7 @@
     }
     function closeLb(){
       if(lb.hidden)return;
-      lb.hidden=true;document.body.classList.remove('lb-open');lbImg.removeAttribute('src');
+      lb.hidden=true;document.body.classList.remove('lb-open');lbImg.removeAttribute('src');lb.classList.remove('photography-view');
       background.forEach(function(item){item.el.inert=item.was;});background=[];
       if(lastFocus&&lastFocus.focus)lastFocus.focus();
     }
@@ -95,6 +95,7 @@
         if(e.metaKey||e.ctrlKey||e.shiftKey||e.button!==0)return;
         e.preventDefault();
         var img=a.querySelector('img'),fig=a.closest('figure'),cap=fig?fig.querySelector('figcaption'):null;
+        lb.classList.toggle('photography-view',!!a.closest('.photography-gallery'));
         openLb(a.getAttribute('href'),img?img.alt:'',cap?cap.textContent:'');
       });
     });

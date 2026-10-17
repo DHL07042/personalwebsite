@@ -75,3 +75,14 @@ PR descriptions, comments, committed files and CI logs are public in this reposi
 - Keep prior research cards, project order, figures, attribution and manuscript status intact. Interest in intent inference is not evidence of having solved intent/response separation.
 - Journal numbering is deliberately unchanged here. The owner selected oldest-first cumulative journal numbers while retaining newest-first display; migrate them with CV v0.992 and public-cv.json in a later reviewed change. Do not relabel publication anchors silently while the public CV still uses the old labels.
 - User-only editorial handoffs do not belong in this repository. Closing a PR or pruning a branch is not a substitute for correct records or any applicable authorship disclosures.
+
+
+## Photography framing — original sources restored (2026-10-18.1)
+- The six files under assets/photos are byte-identical to the owner's uploaded JPEGs. photography.json records their SHA-256 hashes, sizes, and native dimensions.
+- A photograph's frame and aspect ratio are part of its content. Preserve the whole image in BOTH gallery preview and enlarged view. No square conversion, cover crop, hover-zoom crop, clipped corners, arbitrary rotation, stretching, retouching, or generated expansion.
+- Preview and lightbox intentionally reference the same full-frame JPEG here: all six together are about 1.1 MB and are lazy-loaded. No smaller cropped thumbnail may ever become the enlarged image.
+- Preserve the supplied framing even for an unusual camera angle (including travel-4). Do not infer rotation from a scene's upright direction.
+- The old assets/img/travel-*.webp square crops remain as legacy files but are not used by the gallery. Do not reconnect them.
+- Future size optimization requires a separate, full-frame derivative and a traceable source. Verify its entire composition, not just its width/height ratio.
+- Browser checks verify full source-byte hashes, native dimensions, gallery/lightbox fitting, keyboard closure, responsive reflow and portrait/panorama fixtures. Fixtures test layout, not photo content.
+- Preserve Performance driving, RI rows, the CV, publication identifiers, research images, and DNS when editing this gallery.
