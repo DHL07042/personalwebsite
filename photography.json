@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "as_of": "2026-10-18",
+  "source": "Owner-supplied off duty_photography_original.zip",
+  "source_restoration_complete": true,
+  "processing": "None: byte-identical JPEG files; no crop, resize, rotation, re-encoding, retouching, or metadata rewriting.",
+  "photos": [
+    {
+      "id": "travel-1",
+      "path": "assets/photos/travel-1.jpg",
+      "width": 1279,
+      "height": 853,
+      "bytes": 83680,
+      "sha256": "8bacbfc190cf51c3c85e65945f126f0b035090e5474cae0284d7e5aee4c872ce"
+    },
+    {
+      "id": "travel-2",
+      "path": "assets/photos/travel-2.jpg",
+      "width": 1279,
+      "height": 843,
+      "bytes": 181656,
+      "sha256": "0453c085b98cdaa5fc62432a4e9e1e8265d10d260ac9224bc9b9ea34763a50b8"
+    },
+    {
+      "id": "travel-3",
+      "path": "assets/photos/travel-3.jpg",
+      "width": 1280,
+      "height": 832,
+      "bytes": 205326,
+      "sha256": "813dfd9b844a09a8a43b010d7c8d5c16c915f416dde052bd7568c997a6c8c850"
+    },
+    {
+      "id": "travel-4",
+      "path": "assets/photos/travel-4.jpg",
+      "width": 1280,
+      "height": 848,
+      "bytes": 386532,
+      "sha256": "d20c7657c40b75075a833922b0fb382a1639c2c269011a01d65a1f8c9a57f72c"
+    },
+    {
+      "id": "travel-5",
+      "path": "assets/photos/travel-5.jpg",
+      "width": 768,
+      "height": 513,
+      "bytes": 140481,
+      "sha256": "fe9cc813f4ff42512cff74746bd181358b271f944dfee14dc9315397604e842a"
+    },
+    {
+      "id": "travel-6",
+      "path": "assets/photos/travel-6.jpg",
+      "width": 1279,
+      "height": 839,
+      "bytes": 101685,
+      "sha256": "de13369080f5328b72b8b3e2db65848073f2ff614ef80c7fe1139de1fff9fdc9"
+    }
+  ]
+}
