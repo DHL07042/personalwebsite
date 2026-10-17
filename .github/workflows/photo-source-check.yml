@@ -1,0 +1,77 @@
+name: Verify original photograph transfer
+on:
+  push:
+    branches: ['gpt/photo-framing-261018']
+    paths: ['.github/workflows/photo-source-check.yml']
+permissions:
+  contents: read
+jobs:
+  transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gpt/photo-framing-261018
+      - name: Find only exact copies of the owner-supplied photograph bytes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          import urllib.request,urllib.parse,hashlib,json,re,concurrent.futures
+          EXPECTED={
+            '8bacbfc190cf51c3c85e65945f126f0b035090e5474cae0284d7e5aee4c872ce':'travel-1.jpg',
+            '0453c085b98cdaa5fc62432a4e9e1e8265d10d260ac9224bc9b9ea34763a50b8':'travel-2.jpg',
+            '813dfd9b844a09a8a43b010d7c8d5c16c915f416dde052bd7568c997a6c8c850':'travel-3.jpg',
+            'd20c7657c40b75075a833922b0fb382a1639c2c269011a01d65a1f8c9a57f72c':'travel-4.jpg',
+            'fe9cc813f4ff42512cff74746bd181358b271f944dfee14dc9315397604e842a':'travel-5.jpg',
+            'de13369080f5328b72b8b3e2db65848073f2ff614ef80c7fe1139de1fff9fdc9':'travel-6.jpg'}
+          OUT=Path('photo-transfer');OUT.mkdir(exist_ok=True)
+          def get(url):
+            req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
+            with urllib.request.urlopen(req,timeout=15) as r:return r.read(15000000)
+          class P(HTMLParser):
+            def __init__(self):super().__init__();self.links=[];self.images=[]
+            def handle_starttag(self,tag,attrs):
+              a=dict(attrs)
+              if tag=='a' and a.get('href'):self.links.append(a['href'])
+              if tag=='img' and a.get('src'):self.images.append(a['src'])
+          base='https://sites.google.com/view/robotengdhl'
+          pages=[];candidates=[];errors=[]
+          try:
+            s=get(base).decode('utf-8');p=P();p.feed(s);pages=[base]
+            for u in p.links:
+              u=urllib.parse.urljoin(base+'/',u)
+              if u.startswith(base) and u not in pages and any(x in u.lower() for x in ['personal','life','project']):pages.append(u)
+            pages=pages[:7]
+            for u in pages:
+              try:
+                s=get(u).decode('utf-8');p=P();p.feed(s)
+                candidates+=p.images
+                candidates+=re.findall(r'https://[a-zA-Z0-9.-]*googleusercontent\.com/[^\s\"<>]+',s)
+              except Exception as e:errors.append(type(e).__name__)
+          except Exception as e:errors.append(type(e).__name__)
+          urls=[]
+          for u in candidates:
+            if 'googleusercontent.com/' not in u:continue
+            u=u.replace('&amp;','&')
+            for v in [u,re.sub(r'=w\d+(?:-[^?]*)?$', '=w1280',u),re.sub(r'=w\d+(?:-[^?]*)?$', '=w768',u)]:
+              if v not in urls:urls.append(v)
+          urls=urls[:180]
+          def check(u):
+            try:
+              b=get(u);h=hashlib.sha256(b).hexdigest()
+              if h in EXPECTED:
+                (OUT/EXPECTED[h]).write_bytes(b)
+                return {'file':EXPECTED[h],'sha256':h,'bytes':len(b)}
+            except Exception:pass
+            return None
+          with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:matches=[x for x in pool.map(check,urls) if x]
+          result={'pages_read':len(pages),'candidate_urls':len(urls),'matched_originals':sorted({x['file'] for x in matches}),'matches':matches,'errors':errors,'all_six_exact':len(list(OUT.glob('travel-*.jpg')))==6}
+          (OUT/'transfer.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: photo-original-transfer
+          path: photo-transfer/
+          retention-days: 7
